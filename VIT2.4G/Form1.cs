@@ -10,7 +10,7 @@ namespace VIT2._4G
     public partial class Form1 : Form
     {
 
-        Log _log = new Log(false);
+        Log _log = new Log(true);
 
                
         #region Placeholder's crap
@@ -56,17 +56,18 @@ namespace VIT2._4G
         /// Required datas with default values
         /// </summary>
         private string proxy_address;
-        private string port;
         private string ipadd;
         private string subnet;
         private string gateway;
         private string dns;
         private bool isDHCPEnabled;
+        private bool isProxyEnabled;
+
 
         private string _wifi;            // = "[00000011] Realtek RTL8188EE 802.11 bgn Wi-Fi Adapter";
         private bool isFirstRun=true;
         private bool allgood = true;
-
+        
         public Form1()
         {
             InitializeComponent();
@@ -105,8 +106,16 @@ namespace VIT2._4G
                 /// <summary>
                 /// Sets placeholder text for text controls
                 /// </summary>
-                SendMessage(address_textbox.Handle, EM_SETCUEBANNER, 0, proxy_address);
-                SendMessage(port_textbox.Handle, EM_SETCUEBANNER, 0, port);
+                try
+                {
+                    SendMessage(address_textbox.Handle, EM_SETCUEBANNER, 0, proxy_address.Split(':')[0]);
+                    SendMessage(port_textbox.Handle, EM_SETCUEBANNER, 0, proxy_address.Split(':')[1]);
+                }
+                catch
+                {
+                    SendMessage(address_textbox.Handle, EM_SETCUEBANNER, 0, "none");
+                    SendMessage(port_textbox.Handle, EM_SETCUEBANNER, 0, "none");
+                }
                 SendMessage(ip_textbox.Handle, EM_SETCUEBANNER, 0, ipadd);
                 SendMessage(subnet_textbox.Handle, EM_SETCUEBANNER, 0, subnet);
                 SendMessage(gateway_textbox.Handle, EM_SETCUEBANNER, 0, gateway);
@@ -170,50 +179,51 @@ namespace VIT2._4G
 
         public void Set_ip()
         {
+            _log.Create("Testing for isDHCPEnabled?");
             if(!isDHCPEnabled)
             {
+                _log.Create("No it is not. Setting static IP");
                 foreach (ManagementObject objMO in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
                 {
                     if ((bool)objMO["IPEnabled"])
                     {
-                        //try
-                        //{
-                            ManagementBaseObject newIP = objMO.GetMethodParameters("EnableStatic");
-                            newIP["IPAddress"] = new string[] { ipadd };
-                            newIP["SubnetMask"] = new string[] { subnet };
+                        ManagementBaseObject newIP = objMO.GetMethodParameters("EnableStatic");
+                        newIP["IPAddress"] = new string[] { ipadd };
+                        newIP["SubnetMask"] = new string[] { subnet };
                         
-                            ManagementBaseObject newGate= objMO.GetMethodParameters("SetGateways");
-                            newGate["DefaultIPGateway"] = new string[] { gateway };
-                            newGate["GatewayCostMetric"] = new int[] { 1 };
+                        ManagementBaseObject newGate= objMO.GetMethodParameters("SetGateways");
+                        newGate["DefaultIPGateway"] = new string[] { gateway };
+                        newGate["GatewayCostMetric"] = new int[] { 1 };
 
-                            ManagementBaseObject newDNS = objMO.GetMethodParameters("SetDNSServerSearchOrder");
-                            newDNS["DNSServerSearchOrder"] = dns.Split(',');
-
-
-                        objMO.InvokeMethod("EnableStatic", newIP, null);
-                        objMO.InvokeMethod("SetGateways", newGate, null);
-                        objMO.InvokeMethod("SetDNSServerSearchOrder", newDNS, null);
-                        //}
-                        //catch (Exception)
-                        //{
-                        //    throw;
-                        //}
+                        ManagementBaseObject newDNS = objMO.GetMethodParameters("SetDNSServerSearchOrder");
+                        newDNS["DNSServerSearchOrder"] = dns.Split(',');
 
 
+                        _log.Create(objMO.InvokeMethod("EnableStatic", newIP, null).ToString());
+                        _log.Create(objMO.InvokeMethod("SetGateways", newGate, null).ToString());
+                        _log.Create(objMO.InvokeMethod("SetDNSServerSearchOrder", newDNS, null).ToString());
+                        
                     }
                 }
+                return;
             }
+            _log.Create("Yes DHCP is enabled. IP already set Dynamically.");
         }
 
         private void Update_current_data()      // Into Current info group box
         {
             DHCP_checkbox.Checked = isDHCPEnabled;
+            proxy_checkbox.Checked = isProxyEnabled;
+
             Disable_IP_textboxes(isDHCPEnabled);
+            Disable_Proxy_textboxes(isProxyEnabled);
+
             current_ip_sol.Text = ipadd;
             current_dns_sol.Text = dns;
             current_subnet_sol.Text = subnet;
             current_gateway_sol.Text = gateway;
-            current_proxy_sol.Text = proxy_address+":"+port;
+            current_proxy_sol.Text = isProxyEnabled?proxy_address:"Disabled";
+
         }
 
         private bool Get_current_data()
@@ -224,12 +234,27 @@ namespace VIT2._4G
 
         private void Getproxy()
         {
-            
+            _log.Create("Getting proxy");
+            isProxyEnabled = IEproxy.ProxyEnabled;
+            _log.Create(IEproxy.ProxyEnabled.ToString()+" => is the proxyEnabled");
+            proxy_address = IEproxy.ProxyServer;
         }
 
         private void Setproxy()
         {
-
+            if (proxy_checkbox.Checked)
+            {
+                _log.Create("Setting proxy from input as "+proxy_address);
+                IEproxy.ProxyEnabled = true;
+                IEproxy.ProxyServer = proxy_address;
+            }
+            else
+            {
+                _log.Create("User wants to remove proxy. This case is not similar to IP one " +
+                    "as we are not calling a new function `No_proxy` in the checkbox changed event. All" +
+                    " the changes are happening only after onApplyButton Click event");
+                IEproxy.ProxyEnabled = false;
+            }
         }
 
         
@@ -287,7 +312,6 @@ namespace VIT2._4G
                     "Connection Error", MessageBoxButtons.AbortRetryIgnore))
                 {
                     case DialogResult.Ignore:
-                        //custom_messagebox.Display();
                         break;
                     case DialogResult.Retry:_improvise();
                         break;
@@ -316,40 +340,43 @@ namespace VIT2._4G
 
         private void DHCP_checkbox_OnChange(object sender, EventArgs e)
         {
+            Disable_IP_textboxes(DHCP_checkbox.Checked);
             if (DHCP_checkbox.Checked)
             {
-                Disable_IP_textboxes(true);
                 Automatic_IP();
             }
-            else
-            {
-                Disable_IP_textboxes(false);
-            }
+            isDHCPEnabled = DHCP_checkbox.Checked;
         }
 
         private void Automatic_IP()
         {
 
-            object response = null;
+            object response_ip = null;
             foreach (ManagementObject motemp in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
             {
                 if (motemp["Caption"].Equals(_wifi))
                 {
-                    response = motemp.InvokeMethod("EnableDHCP", null);
-                    custom_messagebox.Display(motemp.InvokeMethod("SetDynamicDNSRegistration", null).ToString());
+                    response_ip = motemp.InvokeMethod("EnableDHCP", null);
+                    _log.Create(response_ip.ToString() + " => Response from Enable DHCP");
+                    ManagementBaseObject newDNS = motemp.GetMethodParameters("SetDNSServerSearchOrder");
+                    newDNS["DNSServerSearchOrder"] = null;
+                    _log.Create(motemp.InvokeMethod("SetDNSServerSearchOrder", newDNS, null).ToString());
+
                     break;
                 }
             }
 
-            //MessageBox.Show("IP successfully set automatically.","Done!",MessageBoxButtons.OK,MessageBoxIcon.Information);
             Get_ip();
             Update_current_data();
-            if(response.ToString().Equals("0"))
+            if(response_ip.ToString().Equals("0"))
             {
+                _log.Create("DHCP enabled");
                 custom_messagebox.Display("IP will be set automatically.", "Done!");
             }
             else
             {
+                _log.Create("Something fucked up. The response from Enable DHCP is not 0 and is " 
+                    + response_ip.ToString() + " instead. Check Documentation for what it stands for.");
                 custom_messagebox.Display("I guess something went wrong. Please report this issue.", "Uhh!");
             }
         }
@@ -369,10 +396,7 @@ namespace VIT2._4G
 
         private void Proxy_checkbox_OnChange(object sender, EventArgs e)
         {
-            if (proxy_checkbox.Checked)
-                Disable_Proxy_textboxes(true);
-            else
-                Disable_Proxy_textboxes(false);
+            Disable_Proxy_textboxes(proxy_checkbox.Checked);
         }
 
         private void Disable_Proxy_textboxes(bool v)
@@ -468,6 +492,10 @@ namespace VIT2._4G
             subnet = (subnet_textbox.Text.Length > 0 ? subnet_textbox.Text : current_subnet_sol.Text);
             gateway = (gateway_textbox.Text.Length > 0 ? gateway_textbox.Text : current_gateway_sol.Text);
             dns = (dns_textbox.Text.Length > 0 ? dns_textbox.Text : current_dns_sol.Text);
+            proxy_address = address_textbox.Text + ":" + port_textbox.Text;
+            _log.Create(proxy_address + " is being set.");
+            Setproxy();
+            Getproxy();
             Set_ip();
             Get_ip();
             Update_current_data();

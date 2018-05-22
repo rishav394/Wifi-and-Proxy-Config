@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("WIFI AND PROXY CONFIG")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Rishav.inc")]
+[assembly: AssemblyCompany("Rishav")]
 [assembly: AssemblyProduct("WIFI AND PROXY CONFIG")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]

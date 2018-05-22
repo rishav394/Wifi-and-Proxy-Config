@@ -190,9 +190,9 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(21, 13);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(103, 17);
+            this.label9.Size = new System.Drawing.Size(104, 17);
             this.label9.TabIndex = 8;
-            this.label9.Text = "Select Chipset:";
+            this.label9.Text = "Network Card:";
             // 
             // cancel_button
             // 

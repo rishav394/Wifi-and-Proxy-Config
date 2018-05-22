@@ -84,8 +84,8 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.label2);
-            this.panel2.Controls.Add(this.panel3);
             this.panel2.Controls.Add(this.pictureBox1);
+            this.panel2.Controls.Add(this.panel3);
             this.panel2.Controls.Add(this.ok_button);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 31);
@@ -95,9 +95,6 @@
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 10.5F);
@@ -172,10 +169,11 @@
             // 
             // ok_button
             // 
+            this.ok_button.FlatAppearance.BorderSize = 0;
             this.ok_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ok_button.Image = global::VIT2._4G.Properties.Resources.icons8_Ok_Hand_50px;
             this.ok_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ok_button.Location = new System.Drawing.Point(212, 70);
+            this.ok_button.Location = new System.Drawing.Point(212, 83);
             this.ok_button.Name = "ok_button";
             this.ok_button.Size = new System.Drawing.Size(115, 54);
             this.ok_button.TabIndex = 0;
@@ -193,7 +191,7 @@
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.CancelButton = this.abort_button;
+            this.CancelButton = this.close_button;
             this.ClientSize = new System.Drawing.Size(409, 180);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);

@@ -10,7 +10,7 @@ namespace VIT2._4G
     public partial class Form1 : Form
     {
 
-        Log _log = new Log(true);
+        Log _log = new Log(false);
 
                
         #region Placeholder's crap
@@ -282,10 +282,12 @@ namespace VIT2._4G
             }
             catch
             {
-                switch(custom_messagebox.Display("You are not connected to the specified chipset or your IP address is invalid. The data processes IS UTTER CRAP.",
+                switch(custom_messagebox.Display("You are not connected to the specified chipset or " +
+                    "your IP address is invalid. The data processed IS UTTER CRAP.",
                     "Connection Error", MessageBoxButtons.AbortRetryIgnore))
                 {
                     case DialogResult.Ignore:
+                        //custom_messagebox.Display();
                         break;
                     case DialogResult.Retry:_improvise();
                         break;

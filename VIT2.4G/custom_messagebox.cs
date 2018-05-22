@@ -21,7 +21,10 @@ namespace VIT2._4G
         public static DialogResult Display(string description, string title="", 
             MessageBoxButtons messageBoxButtons=MessageBoxButtons.OK)
         {
+            // First declare an object of the type custom_messagebox
             custom_messagebox messageBox = new custom_messagebox();
+
+            // Not set the lables and the panels accordingly
             if (messageBoxButtons == MessageBoxButtons.AbortRetryIgnore)
             {
                 messageBox.panel3.Enabled = true;
@@ -30,6 +33,8 @@ namespace VIT2._4G
             }
             messageBox.label1.Text = title;
             messageBox.label2.Text = description;
+            
+            // When everything is set display the messbox we created above using ShowDialog()
             messageBox.ShowDialog();
             if (dr == DialogResult.OK && messageBoxButtons == MessageBoxButtons.AbortRetryIgnore)
             {

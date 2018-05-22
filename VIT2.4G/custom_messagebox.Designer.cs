@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(custom_messagebox));
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.close_button = new System.Windows.Forms.Button();
@@ -89,17 +90,20 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 31);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(409, 136);
+            this.panel2.Size = new System.Drawing.Size(409, 149);
             this.panel2.TabIndex = 1;
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.label2.Font = new System.Drawing.Font("Century Gothic", 11.25F);
-            this.label2.Location = new System.Drawing.Point(125, 7);
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 10.5F);
+            this.label2.Location = new System.Drawing.Point(126, 1);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(277, 60);
+            this.label2.Size = new System.Drawing.Size(277, 80);
             this.label2.TabIndex = 2;
             this.label2.Text = "bunifuCustomLabel1";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -109,7 +113,7 @@
             this.panel3.Controls.Add(this.retry_button);
             this.panel3.Controls.Add(this.ignore_button);
             this.panel3.Controls.Add(this.abort_button);
-            this.panel3.Location = new System.Drawing.Point(143, 61);
+            this.panel3.Location = new System.Drawing.Point(143, 70);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(259, 72);
             this.panel3.TabIndex = 4;
@@ -143,6 +147,7 @@
             // 
             // abort_button
             // 
+            this.abort_button.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.abort_button.FlatAppearance.BorderSize = 0;
             this.abort_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.abort_button.Image = global::VIT2._4G.Properties.Resources.icons8_Unavailable_48px;
@@ -156,8 +161,9 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = global::VIT2._4G.Properties.Resources.icons8_Roadblock_96px;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 7);
+            this.pictureBox1.Location = new System.Drawing.Point(12, 17);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(125, 125);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -187,13 +193,14 @@
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.CancelButton = this.close_button;
-            this.ClientSize = new System.Drawing.Size(409, 167);
+            this.CancelButton = this.abort_button;
+            this.ClientSize = new System.Drawing.Size(409, 180);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.DimGray;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "custom_messagebox";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

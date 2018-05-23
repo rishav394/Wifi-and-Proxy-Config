@@ -51,8 +51,10 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\App.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Bunifu_UI_v1.5.3">
@@ -120,21 +122,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\icons8_Multiply_52px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8_Multiply_50px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8_Minus_48px_1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8_Multiply_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icons8_Multiply_25px.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\icons8_Multiply_35px.png" />
   </ItemGroup>
   <ItemGroup>
@@ -162,9 +149,6 @@
     <None Include="Resources\icons8_Roadblock_96px.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\icons8_Ok_Hand_96px.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\icons8_Ok_Hand_50px.png" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +159,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8_Synchronize_52px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\App.ico" />
+    <Content Include="Tools\Bunifu_UI_v1.5.3.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

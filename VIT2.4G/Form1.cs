@@ -10,7 +10,7 @@ namespace VIT2._4G
     public partial class Form1 : Form
     {
 
-        public static bool Enable_logging = true;
+        public static bool Enable_logging = false;
         Log _log = new Log(Enable_logging);
 
                
@@ -461,7 +461,7 @@ namespace VIT2._4G
 
         private void Dns_textbox_TextChanged(object sender, EventArgs e)
         {
-            if (ValidateIPv4(dns_textbox.Text))
+            if (ValidateIPv4(((TextBox)sender).Text))
             {
                 pictureBox4.Visible = false;
             }
@@ -498,7 +498,7 @@ namespace VIT2._4G
         private void PictureBox_MouseHover(object sender, EventArgs e)
         {
             ToolTip tt = new ToolTip();
-            tt.SetToolTip(this.pictureBox1, "Invalid");
+            tt.SetToolTip((Control)sender, caption: "Invalid");
         }
 
         private void Cancel_button_Click(object sender, EventArgs e) => Application.Exit();

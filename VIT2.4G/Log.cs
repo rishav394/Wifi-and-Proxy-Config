@@ -22,8 +22,14 @@ namespace VIT2._4G
             if (enable)
             {
                 AllocConsole();
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("I was called with --console argument.\n" +
+                    "Now you can see my logs while I am creating them.\n\n");
+                Console.ResetColor();
                 Create("The working directory is "+Environment.CurrentDirectory);
                 Create("Logs are being stored in " + path);
+                Console.WriteLine();
             }
         }
         

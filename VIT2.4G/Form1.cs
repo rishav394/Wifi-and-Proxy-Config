@@ -43,19 +43,10 @@ namespace VIT2._4G
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
 
-        private void Panel1_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-            }
-        }
         #endregion
 
-        /// <summary>
-        /// Required datas with default values
-        /// </summary>
+        #region  Variables
+
         private string proxy_address;
         private string ipadd;
         private string subnet;
@@ -70,6 +61,8 @@ namespace VIT2._4G
         private bool allgood = true;
         private bool ip_checkbox_disturbed = false;
         private bool proxy_checkbox_disturbed=false;
+
+        #endregion
 
         public Form1()
         {
@@ -133,96 +126,6 @@ namespace VIT2._4G
             
         }
 
-        #region Alternate SetIP
-        //private void Set_ip()
-        //{
-        //    ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
-        //    ManagementObjectCollection moc = mc.GetInstances();
-
-        //    foreach (ManagementObject mo in moc)
-        //    {
-        //        try
-        //        {
-
-        //            if (mo["Caption"].Equals("[00000011] Realtek RTL8188EE 802.11 bgn Wi-Fi Adapter"))
-        //            {
-        //                MessageBox.Show(ipadd+"Setting");
-        //                ManagementBaseObject newIP =
-        //                    mo.GetMethodParameters("EnableStatic");
-        //                ManagementBaseObject newGate =
-        //                    mo.GetMethodParameters("SetGateways");
-        //                ManagementBaseObject newDNS =
-        //                    mo.GetMethodParameters("SetDNSServerSearchOrder");
-
-        //                newGate["DefaultIPGateway"] = new string[] { gateway };
-        //                newGate["GatewayCostMetric"] = new int[] { 1 };
-
-        //                newIP["IPAddress"] = ipadd.Split(',') ;
-        //                newIP["SubnetMask"] = new string[] { subnet };
-
-
-        //                newDNS["DNSServerSearchOrder"] = dns.Split(',');
-
-
-        //                ManagementBaseObject setIP = mo.InvokeMethod(
-        //                    "EnableStatic", newIP, null);
-        //                ManagementBaseObject setGateways = mo.InvokeMethod(
-        //                    "SetGateways", newGate, null);
-        //                ManagementBaseObject setDNS = mo.InvokeMethod(
-        //                    "SetDNSServerSearchOrder", newDNS, null);
-
-        //                break;
-        //            }
-        //        }
-        //        catch(Exception ep)
-        //        {
-        //            MessageBox.Show(ep.ToString(), "Fatal error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //        }
-
-        //    }
-        //    Get_current_data();
-        //    Update_current_data();
-        //}
-
-        #endregion
-
-        public void Set_ip()
-        {
-            _log.Create("Testing for isDHCPEnabled?");
-            if(!isDHCPEnabled)
-            {
-                _log.Create("No it is not. Setting static IP");
-
-                foreach (ManagementObject objMO in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
-                {
-                    if (objMO["Caption"].Equals(_wifi))
-                    {
-                        _log.Create("Matched with " + _wifi);
-
-                        ManagementBaseObject newIP = objMO.GetMethodParameters("EnableStatic");
-                        newIP["IPAddress"] = new string[] { ipadd };
-                        newIP["SubnetMask"] = new string[] { subnet };
-                        
-                        ManagementBaseObject newGate= objMO.GetMethodParameters("SetGateways");
-                        newGate["DefaultIPGateway"] = new string[] { gateway };
-                        newGate["GatewayCostMetric"] = new int[] { 1 };
-
-                        ManagementBaseObject newDNS = objMO.GetMethodParameters("SetDNSServerSearchOrder");
-                        newDNS["DNSServerSearchOrder"] = dns.Split(',');
-
-
-                        _log.Create(objMO.InvokeMethod("EnableStatic", newIP, null).ToString());
-                        _log.Create(objMO.InvokeMethod("SetGateways", newGate, null).ToString());
-                        _log.Create(objMO.InvokeMethod("SetDNSServerSearchOrder", newDNS, null).ToString());
-
-                        break;
-                    }
-                }
-                return;
-            }
-            _log.Create("Yes DHCP is enabled. IP already set Dynamically.");
-        }
-
         private void Update_current_data()      // Into Current info group box
         {
             _log.Create("Updating data into current groupbox");
@@ -270,35 +173,7 @@ namespace VIT2._4G
                 IEproxy.ProxyEnabled = false;
             }
         }
-
         
-        #region Old method of IP extraction
-        /*
-         * An old method
-        public void GetLocalIPv4andSubnet(NetworkInterfaceType _type)
-        {
-            foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces())
-            {
-                if (item.NetworkInterfaceType == _type && item.OperationalStatus == OperationalStatus.Up)
-                {
-                    foreach (UnicastIPAddressInformation unicastIPAddressInformation in item.GetIPProperties().UnicastAddresses)
-                    {
-                        if (unicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork)
-                        {
-                            ipadd = unicastIPAddressInformation.Address.ToString();
-                            subnet = unicastIPAddressInformation.IPv4Mask.ToString();
-                            gateway = unicastIPAddressInformation.SuffixOrigin.ToString();
-                            return;
-                        }
-                    }
-                }
-            }
-            throw new ArgumentException(string.Format("Can't find subnetmask for IP address '{0}'", address));
-
-        }
-        */
-        #endregion
-
         public bool Get_ip()
         {
             _log.Create("Beginning to extract IP");
@@ -346,8 +221,43 @@ namespace VIT2._4G
             return true;
         }
 
+        public void Set_ip()
+        {
+            _log.Create("Testing for isDHCPEnabled?");
+            if (!isDHCPEnabled)
+            {
+                _log.Create("No it is not. Setting static IP");
 
-   
+                foreach (ManagementObject objMO in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
+                {
+                    if (objMO["Caption"].Equals(_wifi))
+                    {
+                        _log.Create("Matched with " + _wifi);
+
+                        ManagementBaseObject newIP = objMO.GetMethodParameters("EnableStatic");
+                        newIP["IPAddress"] = new string[] { ipadd };
+                        newIP["SubnetMask"] = new string[] { subnet };
+
+                        ManagementBaseObject newGate = objMO.GetMethodParameters("SetGateways");
+                        newGate["DefaultIPGateway"] = new string[] { gateway };
+                        newGate["GatewayCostMetric"] = new int[] { 1 };
+
+                        ManagementBaseObject newDNS = objMO.GetMethodParameters("SetDNSServerSearchOrder");
+                        newDNS["DNSServerSearchOrder"] = dns.Split(',');
+
+
+                        _log.Create(objMO.InvokeMethod("EnableStatic", newIP, null).ToString());
+                        _log.Create(objMO.InvokeMethod("SetGateways", newGate, null).ToString());
+                        _log.Create(objMO.InvokeMethod("SetDNSServerSearchOrder", newDNS, null).ToString());
+
+                        break;
+                    }
+                }
+                return;
+            }
+            _log.Create("Yes DHCP is enabled. IP already set Dynamically.");
+        }
+
         private void Button_mini_Click(object sender, EventArgs e) => WindowState = FormWindowState.Minimized;
 
         private void Button_close_Click(object sender, EventArgs e) => Application.Exit();
@@ -355,15 +265,7 @@ namespace VIT2._4G
         private void Button_close_MouseEnter(object sender, EventArgs e) => button_close.BackColor = Color.Red;
 
         private void Button_close_MouseLeave(object sender, EventArgs e) => button_close.BackColor = Color.Black;
-
-
-        private void DHCP_checkbox_OnChange(object sender, EventArgs e)
-        {
-            ip_checkbox_disturbed = true;
-            Disable_IP_textboxes(DHCP_checkbox.Checked);
-            isDHCPEnabled = DHCP_checkbox.Checked;
-        }
-
+  
         private void Automatic_IP()
         {
 
@@ -395,6 +297,19 @@ namespace VIT2._4G
             }
         }
 
+        private void DHCP_checkbox_OnChange(object sender, EventArgs e)
+        {
+            ip_checkbox_disturbed = true;
+            Disable_IP_textboxes(DHCP_checkbox.Checked);
+            isDHCPEnabled = DHCP_checkbox.Checked;
+        }
+
+        private void Proxy_checkbox_OnChange(object sender, EventArgs e)
+        {
+            proxy_checkbox_disturbed = true;
+            Disable_Proxy_textboxes(proxy_checkbox.Checked);
+        }
+
         private void Disable_IP_textboxes(bool v)
         {
             v = !v;
@@ -408,12 +323,6 @@ namespace VIT2._4G
             label7.ForeColor = v ? (Color.FromArgb(255, 255, 255)) : (Color.FromArgb(100, 100, 100));
         }
 
-        private void Proxy_checkbox_OnChange(object sender, EventArgs e)
-        {
-            proxy_checkbox_disturbed = true;
-            Disable_Proxy_textboxes(proxy_checkbox.Checked);
-        }
-
         private void Disable_Proxy_textboxes(bool v)
         {
             address_textbox.Enabled = v;
@@ -423,53 +332,13 @@ namespace VIT2._4G
         }
 
         #region Error sign display wnen invalid stuff
-        private void Ip_textbox_TextChanged(object sender, EventArgs e)
-        {
-            if (ValidateIPv4(ip_textbox.Text))
-            {
-                pictureBox1.Visible = false;
-            }
-            else
-            {
-                pictureBox1.Visible = true;
-            }
-        }
+        private void Ip_textbox_TextChanged(object sender, EventArgs e) => pictureBox1.Visible = !ValidateIPv4(((TextBox)sender).Text);
 
-        private void Subnet_textbox_TextChanged(object sender, EventArgs e)
-        {
-            if (ValidateIPv4(subnet_textbox.Text))
-            {
-                pictureBox2.Visible = false;
-            }
-            else
-            {
-                pictureBox2.Visible = true;
-            }
-        }
+        private void Subnet_textbox_TextChanged(object sender, EventArgs e) => pictureBox2.Visible = !ValidateIPv4(((TextBox)sender).Text);
 
-        private void Gateway_textbox_TextChanged(object sender, EventArgs e)
-        {
-            if (ValidateIPv4(gateway_textbox.Text))
-            {
-                pictureBox3.Visible = false;
-            }
-            else
-            {
-                pictureBox3.Visible = true;
-            }
-        }
+        private void Gateway_textbox_TextChanged(object sender, EventArgs e) => pictureBox3.Visible = !ValidateIPv4(((TextBox)sender).Text);
 
-        private void Dns_textbox_TextChanged(object sender, EventArgs e)
-        {
-            if (ValidateIPv4(((TextBox)sender).Text))
-            {
-                pictureBox4.Visible = false;
-            }
-            else
-            {
-                pictureBox4.Visible = true;
-            }
-        }
+        private void Dns_textbox_TextChanged(object sender, EventArgs e) => pictureBox4.Visible = !ValidateIPv4(((TextBox)sender).Text);
         #endregion
 
         public bool ValidateIPv4(string ipString)
@@ -489,9 +358,18 @@ namespace VIT2._4G
             return splitValues.All(r => byte.TryParse(r, out byte tempForParsing));
         }
 
+        private void Panel1_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
 
         /// <summary>
         /// Must be set for all error pictures. Need to know how to get the calling control name to replace with pictureBox1 here.
+        /// Update: https://stackoverflow.com/questions/2681949/get-name-of-control-calling-method
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -549,6 +427,8 @@ namespace VIT2._4G
             _log.Create("Sending for Data Updatings");
             Update_current_data();
             custom_messagebox.Display("Task Complete","Yippie!");
+            ip_checkbox_disturbed = false;
+            proxy_checkbox_disturbed = false;
         }
 
         private void Chipset_selector_SelectedIndexChanged(object sender, EventArgs e)
@@ -563,18 +443,7 @@ namespace VIT2._4G
             _improvise();
         }
 
-
         private void Remove_focus(object sender, EventArgs e) => label9.Focus();
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void proxy_groupbox_Enter(object sender, EventArgs e)
-        {
-
-        }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {

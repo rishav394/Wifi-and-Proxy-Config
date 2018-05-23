@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button_mini = new System.Windows.Forms.Button();
+            this.button_close = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -55,8 +57,14 @@
             this.address_textbox = new System.Windows.Forms.TextBox();
             this.port_label = new System.Windows.Forms.Label();
             this.address_label = new System.Windows.Forms.Label();
+            this.proxy_checkbox = new Bunifu.Framework.UI.BunifuCheckbox();
             this.label8 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.DHCP_checkbox = new Bunifu.Framework.UI.BunifuCheckbox();
             this.dns_textbox = new System.Windows.Forms.TextBox();
             this.gateway_textbox = new System.Windows.Forms.TextBox();
             this.subnet_textbox = new System.Windows.Forms.TextBox();
@@ -68,15 +76,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.IP_groupbo = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.proxy_checkbox = new Bunifu.Framework.UI.BunifuCheckbox();
-            this.DHCP_checkbox = new Bunifu.Framework.UI.BunifuCheckbox();
             this.bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(this.components);
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.button_mini = new System.Windows.Forms.Button();
-            this.button_close = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -84,11 +84,11 @@
             this.proxy_groupbox.SuspendLayout();
             this.Innet_proxy_groupbox.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.IP_groupbo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.IP_groupbo.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -103,6 +103,35 @@
             this.panel1.TabIndex = 1;
             this.panel1.MouseCaptureChanged += new System.EventHandler(this.Remove_focus);
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Panel1_MouseDown);
+            // 
+            // button_mini
+            // 
+            this.button_mini.FlatAppearance.BorderSize = 0;
+            this.button_mini.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_mini.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_mini.Image = global::VIT2._4G.Properties.Resources.icons8_Minus_35px;
+            this.button_mini.Location = new System.Drawing.Point(518, 0);
+            this.button_mini.Name = "button_mini";
+            this.button_mini.Size = new System.Drawing.Size(33, 35);
+            this.button_mini.TabIndex = 1;
+            this.button_mini.UseVisualStyleBackColor = true;
+            this.button_mini.Click += new System.EventHandler(this.Button_mini_Click);
+            // 
+            // button_close
+            // 
+            this.button_close.FlatAppearance.BorderSize = 0;
+            this.button_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_close.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_close.Image = global::VIT2._4G.Properties.Resources.icons8_Multiply_35px;
+            this.button_close.Location = new System.Drawing.Point(559, 0);
+            this.button_close.Name = "button_close";
+            this.button_close.Size = new System.Drawing.Size(45, 35);
+            this.button_close.TabIndex = 2;
+            this.button_close.Tag = "";
+            this.button_close.UseVisualStyleBackColor = true;
+            this.button_close.Click += new System.EventHandler(this.Button_close_Click);
+            this.button_close.MouseEnter += new System.EventHandler(this.Button_close_MouseEnter);
+            this.button_close.MouseLeave += new System.EventHandler(this.Button_close_MouseLeave);
             // 
             // label1
             // 
@@ -333,7 +362,6 @@
             this.proxy_groupbox.TabIndex = 1;
             this.proxy_groupbox.TabStop = false;
             this.proxy_groupbox.Text = "Internet Proxy";
-            this.proxy_groupbox.Enter += new System.EventHandler(this.proxy_groupbox_Enter);
             this.proxy_groupbox.MouseCaptureChanged += new System.EventHandler(this.Remove_focus);
             // 
             // Innet_proxy_groupbox
@@ -386,6 +414,20 @@
             this.address_label.TabIndex = 2;
             this.address_label.Text = "Address:";
             // 
+            // proxy_checkbox
+            // 
+            this.proxy_checkbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.proxy_checkbox.ChechedOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.proxy_checkbox.Checked = true;
+            this.proxy_checkbox.CheckedOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.proxy_checkbox.ForeColor = System.Drawing.Color.White;
+            this.proxy_checkbox.Location = new System.Drawing.Point(24, 28);
+            this.proxy_checkbox.Margin = new System.Windows.Forms.Padding(28, 27, 28, 27);
+            this.proxy_checkbox.Name = "proxy_checkbox";
+            this.proxy_checkbox.Size = new System.Drawing.Size(20, 20);
+            this.proxy_checkbox.TabIndex = 0;
+            this.proxy_checkbox.OnChange += new System.EventHandler(this.Proxy_checkbox_OnChange);
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -423,6 +465,64 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "IP Configration";
             this.groupBox1.MouseCaptureChanged += new System.EventHandler(this.Remove_focus);
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
+            this.pictureBox4.Location = new System.Drawing.Point(96, 147);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(25, 25);
+            this.pictureBox4.TabIndex = 4;
+            this.pictureBox4.TabStop = false;
+            this.pictureBox4.Visible = false;
+            this.pictureBox4.MouseEnter += new System.EventHandler(this.PictureBox_MouseHover);
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+            this.pictureBox3.Location = new System.Drawing.Point(96, 115);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(25, 25);
+            this.pictureBox3.TabIndex = 4;
+            this.pictureBox3.TabStop = false;
+            this.pictureBox3.Visible = false;
+            this.pictureBox3.MouseEnter += new System.EventHandler(this.PictureBox_MouseHover);
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(96, 83);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(25, 25);
+            this.pictureBox2.TabIndex = 4;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Visible = false;
+            this.pictureBox2.MouseEnter += new System.EventHandler(this.PictureBox_MouseHover);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(96, 51);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(25, 25);
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Visible = false;
+            this.pictureBox1.MouseEnter += new System.EventHandler(this.PictureBox_MouseHover);
+            // 
+            // DHCP_checkbox
+            // 
+            this.DHCP_checkbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.DHCP_checkbox.ChechedOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.DHCP_checkbox.Checked = false;
+            this.DHCP_checkbox.CheckedOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.DHCP_checkbox.ForeColor = System.Drawing.Color.White;
+            this.DHCP_checkbox.Location = new System.Drawing.Point(21, 22);
+            this.DHCP_checkbox.Margin = new System.Windows.Forms.Padding(21);
+            this.DHCP_checkbox.Name = "DHCP_checkbox";
+            this.DHCP_checkbox.Size = new System.Drawing.Size(20, 20);
+            this.DHCP_checkbox.TabIndex = 0;
+            this.DHCP_checkbox.OnChange += new System.EventHandler(this.DHCP_checkbox_OnChange);
             // 
             // dns_textbox
             // 
@@ -535,111 +635,10 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Obtain IP from DHCP";
             // 
-            // proxy_checkbox
-            // 
-            this.proxy_checkbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.proxy_checkbox.ChechedOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.proxy_checkbox.Checked = true;
-            this.proxy_checkbox.CheckedOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.proxy_checkbox.ForeColor = System.Drawing.Color.White;
-            this.proxy_checkbox.Location = new System.Drawing.Point(24, 28);
-            this.proxy_checkbox.Margin = new System.Windows.Forms.Padding(28, 27, 28, 27);
-            this.proxy_checkbox.Name = "proxy_checkbox";
-            this.proxy_checkbox.Size = new System.Drawing.Size(20, 20);
-            this.proxy_checkbox.TabIndex = 0;
-            this.proxy_checkbox.OnChange += new System.EventHandler(this.Proxy_checkbox_OnChange);
-            // 
-            // DHCP_checkbox
-            // 
-            this.DHCP_checkbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.DHCP_checkbox.ChechedOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.DHCP_checkbox.Checked = false;
-            this.DHCP_checkbox.CheckedOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.DHCP_checkbox.ForeColor = System.Drawing.Color.White;
-            this.DHCP_checkbox.Location = new System.Drawing.Point(21, 22);
-            this.DHCP_checkbox.Margin = new System.Windows.Forms.Padding(21, 21, 21, 21);
-            this.DHCP_checkbox.Name = "DHCP_checkbox";
-            this.DHCP_checkbox.Size = new System.Drawing.Size(20, 20);
-            this.DHCP_checkbox.TabIndex = 0;
-            this.DHCP_checkbox.OnChange += new System.EventHandler(this.DHCP_checkbox_OnChange);
-            // 
             // bunifuElipse1
             // 
             this.bunifuElipse1.ElipseRadius = 10;
             this.bunifuElipse1.TargetControl = this;
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(96, 147);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(25, 25);
-            this.pictureBox4.TabIndex = 4;
-            this.pictureBox4.TabStop = false;
-            this.pictureBox4.Visible = false;
-            this.pictureBox4.MouseEnter += new System.EventHandler(this.PictureBox_MouseHover);
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(96, 115);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(25, 25);
-            this.pictureBox3.TabIndex = 4;
-            this.pictureBox3.TabStop = false;
-            this.pictureBox3.Visible = false;
-            this.pictureBox3.MouseEnter += new System.EventHandler(this.PictureBox_MouseHover);
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(96, 83);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(25, 25);
-            this.pictureBox2.TabIndex = 4;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.Visible = false;
-            this.pictureBox2.MouseEnter += new System.EventHandler(this.PictureBox_MouseHover);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(96, 51);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(25, 25);
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Visible = false;
-            this.pictureBox1.MouseEnter += new System.EventHandler(this.PictureBox_MouseHover);
-            // 
-            // button_mini
-            // 
-            this.button_mini.FlatAppearance.BorderSize = 0;
-            this.button_mini.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_mini.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_mini.Image = global::VIT2._4G.Properties.Resources.icons8_Minus_35px;
-            this.button_mini.Location = new System.Drawing.Point(518, 0);
-            this.button_mini.Name = "button_mini";
-            this.button_mini.Size = new System.Drawing.Size(33, 35);
-            this.button_mini.TabIndex = 1;
-            this.button_mini.UseVisualStyleBackColor = true;
-            this.button_mini.Click += new System.EventHandler(this.Button_mini_Click);
-            // 
-            // button_close
-            // 
-            this.button_close.FlatAppearance.BorderSize = 0;
-            this.button_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button_close.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_close.Image = global::VIT2._4G.Properties.Resources.icons8_Multiply_35px;
-            this.button_close.Location = new System.Drawing.Point(559, 0);
-            this.button_close.Name = "button_close";
-            this.button_close.Size = new System.Drawing.Size(45, 35);
-            this.button_close.TabIndex = 2;
-            this.button_close.Tag = "";
-            this.button_close.UseVisualStyleBackColor = true;
-            this.button_close.Click += new System.EventHandler(this.Button_close_Click);
-            this.button_close.MouseEnter += new System.EventHandler(this.Button_close_MouseEnter);
-            this.button_close.MouseLeave += new System.EventHandler(this.Button_close_MouseLeave);
             // 
             // Form1
             // 
@@ -659,7 +658,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -673,12 +671,12 @@
             this.Innet_proxy_groupbox.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.IP_groupbo.ResumeLayout(false);
-            this.IP_groupbo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.IP_groupbo.ResumeLayout(false);
+            this.IP_groupbo.PerformLayout();
             this.ResumeLayout(false);
 
         }

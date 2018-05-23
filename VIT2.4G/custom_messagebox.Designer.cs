@@ -35,17 +35,17 @@
             this.close_button = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label2 = new Bunifu.Framework.UI.BunifuCustomLabel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.retry_button = new System.Windows.Forms.Button();
             this.ignore_button = new System.Windows.Forms.Button();
             this.abort_button = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.ok_button = new System.Windows.Forms.Button();
             this.bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(this.components);
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -105,6 +105,17 @@
             this.label2.Text = "bunifuCustomLabel1";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Image = global::VIT2._4G.Properties.Resources.icons8_Roadblock_96px;
+            this.pictureBox1.Location = new System.Drawing.Point(12, 17);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(125, 125);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 3;
+            this.pictureBox1.TabStop = false;
+            // 
             // panel3
             // 
             this.panel3.Controls.Add(this.retry_button);
@@ -128,6 +139,7 @@
             this.retry_button.Tag = "Retry";
             this.retry_button.UseVisualStyleBackColor = true;
             this.retry_button.Click += new System.EventHandler(this.Button5_Click);
+            this.retry_button.MouseHover += new System.EventHandler(this.Retry_button_MouseEnter);
             // 
             // ignore_button
             // 
@@ -141,6 +153,7 @@
             this.ignore_button.Tag = "Ignore";
             this.ignore_button.UseVisualStyleBackColor = true;
             this.ignore_button.Click += new System.EventHandler(this.Button4_Click);
+            this.ignore_button.MouseHover += new System.EventHandler(this.Ignore_button_MouseEnter);
             // 
             // abort_button
             // 
@@ -155,17 +168,7 @@
             this.abort_button.Tag = "Abort";
             this.abort_button.UseVisualStyleBackColor = true;
             this.abort_button.Click += new System.EventHandler(this.Button1_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.Image = global::VIT2._4G.Properties.Resources.icons8_Roadblock_96px;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 17);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(125, 125);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 3;
-            this.pictureBox1.TabStop = false;
+            this.abort_button.MouseHover += new System.EventHandler(this.Abort_button_MouseEnter);
             // 
             // ok_button
             // 
@@ -206,8 +209,8 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

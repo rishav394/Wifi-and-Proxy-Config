@@ -92,5 +92,22 @@ namespace VIT2._4G
             Close();
         }
 
+        private void Abort_button_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip tt = new ToolTip();
+            tt.SetToolTip(this.abort_button, "Abort");
+        }
+
+        private void Ignore_button_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip tt = new ToolTip();
+            tt.SetToolTip(this.ignore_button, "Ignore");
+        }
+
+        private void Retry_button_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip tt = new ToolTip();
+            tt.SetToolTip(this.retry_button, "Retry");
+        }
     }
 }

@@ -12,9 +12,12 @@ namespace VIT2._4G
     class Log
     {
         public static string path = Application.UserAppDataPath + "\\";
-        
+        public StreamWriter str;
+
         public Log(bool enable)
         {
+
+            str = new StreamWriter(File.Open(path + Environment.UserName + ".log", FileMode.Append));
 
             if (enable)
             {
@@ -23,7 +26,7 @@ namespace VIT2._4G
                 Create("Logs are being stored in " + path);
             }
         }
-
+        
         
         /// <summary>
         /// Enable console for logging
@@ -36,15 +39,13 @@ namespace VIT2._4G
 
         public void Create(string data)
         {
-            StreamWriter str = new StreamWriter(File.Open(path + Environment.UserName + ".log", FileMode.Append));
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write(DateTime.Now+":");
             str.Write(DateTime.Now);
             Console.ResetColor();
             Console.WriteLine(" {0}",data);
             str.WriteLine(": {0}", data);
-            str.Dispose();
-        }
+         }
 
     }
 }

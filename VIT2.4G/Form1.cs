@@ -10,7 +10,8 @@ namespace VIT2._4G
     public partial class Form1 : Form
     {
 
-        Log _log = new Log(true);
+        public static bool Enable_logging = true;
+        Log _log = new Log(Enable_logging);
 
                
         #region Placeholder's crap
@@ -67,7 +68,9 @@ namespace VIT2._4G
         private string _wifi;            // = "[00000011] Realtek RTL8188EE 802.11 bgn Wi-Fi Adapter";
         private bool isFirstRun=true;
         private bool allgood = true;
-        
+        private bool ip_checkbox_disturbed = false;
+        private bool proxy_checkbox_disturbed=false;
+
         public Form1()
         {
             InitializeComponent();
@@ -96,13 +99,19 @@ namespace VIT2._4G
 
         private void _improvise()
         {
+            _log.Create("Improvise called.");
+            _log.Create("Calling Get_current_data()");
             allgood = Get_current_data();
+            _log.Create("allgood => " + allgood);
             if (allgood)
             {
+                _log.Create("Making button White");
                 apply_button.ForeColor = Color.White;
 
+                _log.Create("Sending data doe udation");
                 Update_current_data();             //We are connected to a wifi and have a valid address
 
+                _log.Create("Setting Placeholders");
                 /// <summary>
                 /// Sets placeholder text for text controls
                 /// </summary>
@@ -186,7 +195,6 @@ namespace VIT2._4G
 
                 foreach (ManagementObject objMO in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
                 {
-                    _log.Create("Testing for NIC " + objMO["Caption"]);
                     if (objMO["Caption"].Equals(_wifi))
                     {
                         _log.Create("Matched with " + _wifi);
@@ -298,9 +306,7 @@ namespace VIT2._4G
             {
 
                 foreach (ManagementObject mo in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
-                {
-                    _log.Create("Matching NIC: " + mo["Caption"]);
-                    
+                {   
                     if (mo["Caption"].Equals(_wifi))
                     {
                         _log.Create("Got a match for NIC with " + _wifi);
@@ -353,6 +359,7 @@ namespace VIT2._4G
 
         private void DHCP_checkbox_OnChange(object sender, EventArgs e)
         {
+            ip_checkbox_disturbed = true;
             Disable_IP_textboxes(DHCP_checkbox.Checked);
             isDHCPEnabled = DHCP_checkbox.Checked;
         }
@@ -375,9 +382,7 @@ namespace VIT2._4G
                 }
             }
 
-            Get_ip();
-            Update_current_data();
-            if(response_ip.ToString().Equals("0"))
+            if (response_ip.ToString().Equals("0"))
             {
                 _log.Create("DHCP enabled");
                 custom_messagebox.Display("IP will be set automatically.", "Done!");
@@ -405,6 +410,7 @@ namespace VIT2._4G
 
         private void Proxy_checkbox_OnChange(object sender, EventArgs e)
         {
+            proxy_checkbox_disturbed = true;
             Disable_Proxy_textboxes(proxy_checkbox.Checked);
         }
 
@@ -483,6 +489,12 @@ namespace VIT2._4G
             return splitValues.All(r => byte.TryParse(r, out byte tempForParsing));
         }
 
+
+        /// <summary>
+        /// Must be set for all error pictures. Need to know how to get the calling control name to replace with pictureBox1 here.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PictureBox_MouseHover(object sender, EventArgs e)
         {
             ToolTip tt = new ToolTip();
@@ -493,37 +505,48 @@ namespace VIT2._4G
 
         private void Apply_button_Click(object sender, EventArgs e)
         {
-            _log.Create("\n\n OKAY finalising things. Apply button was clicked");
-            if (isDHCPEnabled)
+            _log.Create("OKAY finalising things. Apply button was clicked");
+            if (ip_checkbox_disturbed)
             {
-                _log.Create("DHCP checkbox was clicked. Automatic IP is being called...");
-                Automatic_IP();
-            }
-            else
-            {
-                _log.Create("DHCP checkbox was not enabled. Trying to set IP manually.");
-
-                if (pictureBox1.Visible || pictureBox2.Visible || pictureBox3.Visible || pictureBox4.Visible || !allgood)
+                _log.Create("ip_checkbox_disturbed => True");
+                if (isDHCPEnabled)
                 {
-                    _log.Create("Something is Invalid or get_data returned false (not allgood). ");
-                    custom_messagebox.Display("Please correct the errors above and try again.");
-                    return;
+                    _log.Create("DHCP checkbox was clicked. Automatic IP is being called...");
+                    Automatic_IP();
                 }
-                ipadd = (ip_textbox.Text.Length > 0 ? ip_textbox.Text : current_ip_sol.Text);
-                subnet = (subnet_textbox.Text.Length > 0 ? subnet_textbox.Text : current_subnet_sol.Text);
-                gateway = (gateway_textbox.Text.Length > 0 ? gateway_textbox.Text : current_gateway_sol.Text);
-                dns = (dns_textbox.Text.Length > 0 ? dns_textbox.Text : current_dns_sol.Text);
-                proxy_address = address_textbox.Text + ":" + port_textbox.Text;
-                _log.Create(proxy_address + " is being set.");
-                
-                Set_ip();
+                else
+                {
+                    _log.Create("DHCP checkbox was not enabled. Trying to set IP manually.");
+
+                    if (pictureBox1.Visible || pictureBox2.Visible || pictureBox3.Visible || pictureBox4.Visible || !allgood)
+                    {
+                        _log.Create("Something is Invalid or get_data returned false (not allgood). ");
+                        custom_messagebox.Display("Please correct the errors above and try again.");
+                        return;
+                    }
+                    ipadd = (ip_textbox.Text.Length > 0 ? ip_textbox.Text : current_ip_sol.Text);
+                    subnet = (subnet_textbox.Text.Length > 0 ? subnet_textbox.Text : current_subnet_sol.Text);
+                    gateway = (gateway_textbox.Text.Length > 0 ? gateway_textbox.Text : current_gateway_sol.Text);
+                    dns = (dns_textbox.Text.Length > 0 ? dns_textbox.Text : current_dns_sol.Text);
+
+                    Set_ip();
+                }
             }
-            _log.Create("I guess everything was good. Setting and fetching proxy");
-            Setproxy();
+            if (proxy_checkbox_disturbed)
+            {
+                _log.Create("proxy_checkbox_disturbed => True");
+
+                proxy_address = (address_textbox.Text.Length > 0 && port_textbox.Text.Length > 0) ? address_textbox.Text + ":" + port_textbox.Text : IEproxy.ProxyServer;
+
+                _log.Create("proxy_address => " + proxy_address);
+                _log.Create("I guess everything was good. Sending for proxy completion");
+                Setproxy();
+            }
+            _log.Create("Sending for Proxy fetching");
             Getproxy();
             _log.Create("Sending for IP fetching");
             Get_ip();
-            _log.Create("Sending for Data Updating");
+            _log.Create("Sending for Data Updatings");
             Update_current_data();
             custom_messagebox.Display("Task Complete","Yippie!");
         }
@@ -551,6 +574,12 @@ namespace VIT2._4G
         private void proxy_groupbox_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _log.str.WriteLine("-------------------------------------------------------\n\n\n");
+            _log.str.Dispose();
         }
     }
 }

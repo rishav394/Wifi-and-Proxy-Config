@@ -8,8 +8,7 @@ using Microsoft.Win32;
 namespace VIT2._4G
 {
     class IEproxy
-    {
-
+    {   
         private static RegistryKey _InternetSettings;                   //Probably used to navigate to the key
 
         /// <summary>

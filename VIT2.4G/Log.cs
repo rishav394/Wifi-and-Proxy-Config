@@ -38,10 +38,10 @@ namespace VIT2._4G
         {
             StreamWriter str = new StreamWriter(File.Open(path + Environment.UserName + ".log", FileMode.Append));
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write(DateTime.Now);
+            Console.Write(DateTime.Now+":");
             str.Write(DateTime.Now);
             Console.ResetColor();
-            Console.WriteLine(": {0}",data);
+            Console.WriteLine(" {0}",data);
             str.WriteLine(": {0}", data);
             str.Dispose();
         }

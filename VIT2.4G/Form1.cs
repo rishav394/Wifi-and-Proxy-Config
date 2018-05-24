@@ -56,7 +56,7 @@ namespace VIT2._4G
         private bool isProxyEnabled;
 
 
-        private string _wifi;            // = "[00000011] Realtek RTL8188EE 802.11 bgn Wi-Fi Adapter";
+        private string _wifi;            // "[00000011] Realtek RTL8188EE 802.11 bgn Wi-Fi Adapter"
         private bool isFirstRun=true;
         private bool allgood = true;
         private bool ip_checkbox_disturbed = false;
@@ -101,8 +101,8 @@ namespace VIT2._4G
                 _log.Create("Making button White");
                 apply_button.ForeColor = Color.White;
 
-                _log.Create("Sending data doe udation");
-                Update_current_data();             //We are connected to a wifi and have a valid address
+                _log.Create("We are connected to a wifi and have a valid address. Sending data for udation. ");
+                Update_current_data();            
 
                 _log.Create("Setting Placeholders");
                 /// <summary>
@@ -126,7 +126,10 @@ namespace VIT2._4G
             
         }
 
-        private void Update_current_data()      // Into Current info group box
+        /// <summary>
+        /// Placing information into current_groupBox
+        /// </summary>
+        private void Update_current_data()      
         {
             _log.Create("Updating data into current groupbox");
             DHCP_checkbox.Checked = isDHCPEnabled;
@@ -144,10 +147,14 @@ namespace VIT2._4G
             _log.Create("Done!");
         }
 
+        /// <summary>
+        /// Calling both GetIp and GetProxy
+        /// </summary>
+        /// <returns>returns false if an exception was throws earlier and we are not collected to a wifi with aproper address</returns>
         private bool Get_current_data()
         {
             Getproxy();
-            return (Get_ip());       //returns false if an exception was throws earlier and we are not collected to a wifi with aproper address
+            return (Get_ip());
         }
 
         private void Getproxy()
@@ -204,7 +211,7 @@ namespace VIT2._4G
                 {
                     case DialogResult.Ignore:
                         break;
-                    case DialogResult.Retry:_improvise();
+                    case DialogResult.Retry:Get_ip();
                         break;
                     case DialogResult.None:
                     case DialogResult.Abort:
@@ -224,38 +231,33 @@ namespace VIT2._4G
         public void Set_ip()
         {
             _log.Create("Testing for isDHCPEnabled?");
-            if (!isDHCPEnabled)
+            _log.Create("No it is not. Setting static IP");
+
+            foreach (ManagementObject objMO in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
             {
-                _log.Create("No it is not. Setting static IP");
-
-                foreach (ManagementObject objMO in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
+                if (objMO["Caption"].Equals(_wifi))
                 {
-                    if (objMO["Caption"].Equals(_wifi))
-                    {
-                        _log.Create("Matched with " + _wifi);
+                    _log.Create("Matched with " + _wifi);
 
-                        ManagementBaseObject newIP = objMO.GetMethodParameters("EnableStatic");
-                        newIP["IPAddress"] = new string[] { ipadd };
-                        newIP["SubnetMask"] = new string[] { subnet };
+                    ManagementBaseObject newIP = objMO.GetMethodParameters("EnableStatic");
+                    newIP["IPAddress"] = new string[] { ipadd };
+                    newIP["SubnetMask"] = new string[] { subnet };
 
-                        ManagementBaseObject newGate = objMO.GetMethodParameters("SetGateways");
-                        newGate["DefaultIPGateway"] = new string[] { gateway };
-                        newGate["GatewayCostMetric"] = new int[] { 1 };
+                    ManagementBaseObject newGate = objMO.GetMethodParameters("SetGateways");
+                    newGate["DefaultIPGateway"] = new string[] { gateway };
+                    newGate["GatewayCostMetric"] = new int[] { 1 };
 
-                        ManagementBaseObject newDNS = objMO.GetMethodParameters("SetDNSServerSearchOrder");
-                        newDNS["DNSServerSearchOrder"] = dns.Split(',');
+                    ManagementBaseObject newDNS = objMO.GetMethodParameters("SetDNSServerSearchOrder");
+                    newDNS["DNSServerSearchOrder"] = dns.Split(',');
 
 
-                        _log.Create(objMO.InvokeMethod("EnableStatic", newIP, null).ToString());
-                        _log.Create(objMO.InvokeMethod("SetGateways", newGate, null).ToString());
-                        _log.Create(objMO.InvokeMethod("SetDNSServerSearchOrder", newDNS, null).ToString());
+                    _log.Create(objMO.InvokeMethod("EnableStatic", newIP, null).ToString());
+                    _log.Create(objMO.InvokeMethod("SetGateways", newGate, null).ToString());
+                    _log.Create(objMO.InvokeMethod("SetDNSServerSearchOrder", newDNS, null).ToString());
 
-                        break;
-                    }
+                    break;
                 }
-                return;
             }
-            _log.Create("Yes DHCP is enabled. IP already set Dynamically.");
         }
 
         private void Button_mini_Click(object sender, EventArgs e) => WindowState = FormWindowState.Minimized;

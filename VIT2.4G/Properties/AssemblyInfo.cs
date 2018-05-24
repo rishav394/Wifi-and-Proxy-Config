@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("WIFI AND PROXY CONFIG")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A handy tool to Manage IPv4 and Proxy Settings")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Rishav")]
 [assembly: AssemblyProduct("WIFI AND PROXY CONFIG")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("inc")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible

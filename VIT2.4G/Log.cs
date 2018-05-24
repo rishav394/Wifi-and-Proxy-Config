@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 
@@ -27,7 +23,7 @@ namespace VIT2._4G
                 Console.WriteLine("I was called with --console argument.\n" +
                     "Now you can see my logs while I am creating them.\n\n");
                 Console.ResetColor();
-                Create("The working directory is "+Environment.CurrentDirectory);
+                Create("The working directory is " + Environment.CurrentDirectory);
                 Create("Logs are being stored in " + path);
                 Console.WriteLine();
             }
@@ -46,10 +42,10 @@ namespace VIT2._4G
         public void Create(string data)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write(DateTime.Now+":");
+            Console.Write(DateTime.Now + ":");
             str.Write(DateTime.Now);
             Console.ResetColor();
-            Console.WriteLine(" {0}",data);
+            Console.WriteLine(" {0}", data);
             str.WriteLine(": {0}", data);
          }
 

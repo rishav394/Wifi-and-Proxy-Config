@@ -161,7 +161,7 @@ namespace VIT2._4G
         {
             _log.Create("Getting proxy");
             isProxyEnabled = IEproxy.ProxyEnabled;
-            _log.Create(IEproxy.ProxyEnabled.ToString()+" => is the proxyEnabled");
+            _log.Create(IEproxy.ProxyEnabled.ToString() + " => is the proxyEnabled");
             proxy_address = IEproxy.ProxyServer;
         }
 
@@ -169,7 +169,7 @@ namespace VIT2._4G
         {
             if (proxy_checkbox.Checked)
             {
-                _log.Create("Setting proxy from input as "+proxy_address);
+                _log.Create("Setting proxy from input as " + proxy_address);
                 IEproxy.ProxyEnabled = true;
                 IEproxy.ProxyServer = proxy_address;
             }

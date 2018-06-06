@@ -12,7 +12,7 @@ namespace VIT2._4G
         [STAThread]
         static void Main(string []args)
         {
-            if (args.Contains<string>("--console"))
+            if (args.Contains("--console"))
             {
                 Form1.Enable_logging = true;
             }

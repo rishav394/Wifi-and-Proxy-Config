@@ -49,5 +49,16 @@ namespace VIT2._4G
             str.WriteLine(": {0}", data);
          }
 
+        public void Highlight(string data, ConsoleColor consoleColor)
+        {
+            Console.ForegroundColor = consoleColor;
+            Console.Write(DateTime.Now + ":");
+            str.Write(DateTime.Now);
+            Console.ForegroundColor = consoleColor;
+            Console.WriteLine(" {0}", data);
+            str.WriteLine(": {0}", data);
+            Console.ResetColor();
+        }
+
     }
 }

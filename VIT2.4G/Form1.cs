@@ -74,18 +74,34 @@ namespace VIT2._4G
 
             _improvise();
 
+            isFirstRun = false;
+
+
         }
 
         private void Select_wifi_chipset()
         {
-
+            bool nomore = false;
             foreach (ManagementObject monew in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
             {
                 chipset_selector.Items.Add(monew["Caption"]);
-                if (monew["Caption"].ToString().Contains("Wi-Fi"))
+                
+                if ((bool)monew["IPEnabled"])
                 {
-                    chipset_selector.SelectedIndex = chipset_selector.Items.Count - 1;
-                    _wifi = monew["Caption"].ToString();
+                    _log.Create("Okay I found a IP Enabled Device");
+                    chipset_selector.Items[chipset_selector.Items.Count - 1] += "\t♥";
+                    if (!nomore)
+                    {
+                        _log.Create("Hmm let me check if the NIC is a WiFi adapter");
+                        nomore = monew["Caption"].ToString().Contains("Wi-Fi");
+                        chipset_selector.SelectedIndex = chipset_selector.Items.Count - 1;
+                        _wifi = monew["Caption"].ToString();
+                        if (nomore)
+                        {
+                            _log.Highlight("Hurrah Wi-Fi was found. `nomore` = true now",ConsoleColor.Cyan);
+                        }
+                    }
+                    
                 }
             }
         }
@@ -437,7 +453,6 @@ namespace VIT2._4G
         {
             if (isFirstRun)
             {
-                isFirstRun = false;
                 return;
             }
             _wifi = chipset_selector.Text;

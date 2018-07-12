@@ -14,16 +14,7 @@ namespace VIT2._4G
         private readonly Log _log = new Log(EnableLogging);
         
         #region Placeholder's crap
-
-        /// <summary>
-        ///     SendMessage import
-        ///     Specifically used in this case for setting placeholder text for text controls
-        /// </summary>
-        /// <param name="hWnd">IntPtr</param>
-        /// <param name="msg">int</param>
-        /// <param name="wParam">int</param>
-        /// <param name="lParam">[MarshalAs(UnmanagedType.LPWStr)]string</param>
-        /// <returns></returns>
+        
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern int SendMessage(
             IntPtr hWnd,
@@ -68,7 +59,7 @@ namespace VIT2._4G
 
         private bool isProxyEnabled;
 
-        private string wifi; // "[00000011] Realtek RTL8188EE 802.11 bgn Wi-Fi Adapter"
+        private string ourTargetChipSet;
 
         private readonly bool isFirstRun;
 
@@ -110,8 +101,11 @@ namespace VIT2._4G
                         this._log.Create("Hmm let me check if the NIC is a WiFi adapter");
                         noMore = monew["Caption"].ToString().Contains("Wi-Fi");
                         this.chipset_selector.SelectedIndex = this.chipset_selector.Items.Count - 1;
-                        this.wifi = monew["Caption"].ToString();
-                        if (noMore) this._log.Highlight("Hurrah Wi-Fi was found. `nomore` = true now", ConsoleColor.Cyan);
+                        this.ourTargetChipSet = monew["Caption"].ToString();
+                        if (noMore)
+                        {
+                            this._log.Highlight("Hurrah Wi-Fi was found. `nomore` = true now", ConsoleColor.Cyan);
+                        }
                     }
                 }
             }
@@ -123,7 +117,11 @@ namespace VIT2._4G
             this._log.Create("Calling Get_current_data()");
             this.allGood = this.GetCurrentData();
             this._log.Create("allGood => " + this.allGood);
-            if (!this.allGood) return;
+            if (!this.allGood)
+            {
+                return;
+            }
+
             this._log.Create("Making button White");
             this.apply_button.ForeColor = Color.White;
 
@@ -172,7 +170,7 @@ namespace VIT2._4G
         /// <summary>
         ///     Calling both GetIp and GetProxy
         /// </summary>
-        /// <returns>returns false if an exception was throws earlier and we are not collected to a wifi with aproper address</returns>
+        /// <returns>returns false if an exception was throws earlier and we are not collected to a wifi with a proper address</returns>
         private bool GetCurrentData()
         {
             this.GetProxy();
@@ -213,14 +211,30 @@ namespace VIT2._4G
                     new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
                 {
                     var mo = (ManagementObject)o;
-                    if (mo["Caption"].Equals(this.wifi))
+                    if (mo["Caption"].Equals(this.ourTargetChipSet))
                     {
-                        this._log.Create("Got a match for NIC with " + this.wifi);
+                        this._log.Create("Got a match for NIC with " + this.ourTargetChipSet);
                         this.isDhcpEnabled = (bool)mo.Properties["DHCPEnabled"].Value;
                         this.ipAdd = ((string[])mo["IPAddress"])[0];
                         this.subNet = ((string[])mo["IPSubnet"])[0];
                         this.gateway = ((string[])mo["DefaultIPGateway"])[0];
-                        this.dns = ((string[])mo["DNSServerSearchOrder"])[0];
+
+                        // TODO: Need a better way.
+                        {
+                            while (true)
+                            {
+                                try
+                                {
+                                    this.dns = ((string[])mo["DNSServerSearchOrder"])[0];
+                                }
+                                catch (Exception e)
+                                {
+                                    this._log.Highlight(e.ToString(), ConsoleColor.Red);
+                                }
+
+                                break;
+                            }
+                        }
 
                         break;
                     }
@@ -240,7 +254,7 @@ namespace VIT2._4G
                         this.GetIp();
                         break;
                     default:
-                        Environment.Exit(1);
+                        this.timer1.Enabled = true;
                         break;
                 }
 
@@ -256,13 +270,18 @@ namespace VIT2._4G
         {
             this._log.Create("Testing for isDHCPEnabled?");
             this._log.Create("No it is not. Setting static IP");
-
-            foreach (ManagementBaseObject o in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
+            try
             {
-                var objMo = (ManagementObject)o;
-                if (objMo["Caption"].Equals(this.wifi))
+                foreach (ManagementBaseObject o in
+                    new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
                 {
-                    this._log.Create("Matched with " + this.wifi);
+                    var objMo = (ManagementObject)o;
+                    if (!objMo["Caption"].Equals(this.ourTargetChipSet))
+                    {
+                        continue;
+                    }
+
+                    this._log.Create("Matched with " + this.ourTargetChipSet);
 
                     ManagementBaseObject newIp = objMo.GetMethodParameters("EnableStatic");
                     newIp["IPAddress"] = new[] { this.ipAdd };
@@ -280,6 +299,22 @@ namespace VIT2._4G
                     this._log.Create(objMo.InvokeMethod("SetDNSServerSearchOrder", newDns, null)?.ToString());
 
                     break;
+                }
+            }
+            catch (Exception exception)
+            {
+                this._log.Highlight(exception.ToString(), ConsoleColor.Red);
+                var dialogResult = CustomMessagebox.Display(exception.ToString(), "Unable to set IP", MessageBoxButtons.AbortRetryIgnore);
+                switch (dialogResult)
+                {
+                    case DialogResult.Retry:
+                        this.SetIp();
+                        break;
+                    case DialogResult.Ignore:
+                        break;
+                    default:
+                        this.timer1.Enabled = true;
+                        break;
                 }
             }
         }
@@ -310,7 +345,7 @@ namespace VIT2._4G
             foreach (ManagementBaseObject o in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
             {
                 var moTemp = (ManagementObject)o;
-                if (moTemp["Caption"].Equals(this.wifi))
+                if (moTemp["Caption"].Equals(this.ourTargetChipSet))
                 {
                     responseIp = moTemp.InvokeMethod("EnableDHCP", null);
                     this._log.Create(responseIp + " => Response from Enable DHCP");
@@ -330,9 +365,12 @@ namespace VIT2._4G
             else
             {
                 if (responseIp != null)
+                {
                     this._log.Create(
                         "Something fucked up. The response from Enable DHCP is not 0 and is " + responseIp
                                                                                               + " instead. Check Documentation for what it stands for.");
+                }
+
                 CustomMessagebox.Display("I guess something went wrong. Please report this issue.", "Uhh!");
             }
         }
@@ -395,12 +433,18 @@ namespace VIT2._4G
 
         #endregion
 
-        public bool ValidateIPv4(string ipString)
+        private bool ValidateIPv4(string ipString)
         {
-            if (string.IsNullOrWhiteSpace(ipString)) return true;
+            if (string.IsNullOrWhiteSpace(ipString))
+            {
+                return true;
+            }
 
             string[] splitValues = ipString.Split('.');
-            if (splitValues.Length != 4) return false;
+            if (splitValues.Length != 4)
+            {
+                return false;
+            }
 
             return splitValues.All(r => byte.TryParse(r, out byte _));
         }
@@ -469,8 +513,8 @@ namespace VIT2._4G
                 this._log.Create("proxy_checkbox_disturbed => True");
 
                 this.proxyAddress = this.address_textbox.Text.Length > 0 && this.port_textbox.Text.Length > 0
-                                    ? this.address_textbox.Text + ":" + this.port_textbox.Text
-                                    : Eproxy.ProxyServer;
+                                        ? this.address_textbox.Text + ":" + this.port_textbox.Text
+                                        : Eproxy.ProxyServer;
 
                 this._log.Create("proxy_address => " + this.proxyAddress);
                 this._log.Create("I guess everything was good. Sending for proxy completion");
@@ -488,8 +532,12 @@ namespace VIT2._4G
 
         private void ChipsetSelectorSelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.isFirstRun) return;
-            this.wifi = this.chipset_selector.Text;
+            if (this.isFirstRun)
+            {
+                return;
+            }
+
+            this.ourTargetChipSet = this.chipset_selector.Text;
             this.label9.Focus();
             this.Improvise();
         }
@@ -507,10 +555,8 @@ namespace VIT2._4G
 
         private void Timer1Tick(object sender, EventArgs e)
         {
-            this.FormBorderStyle = FormBorderStyle.Sizable;
-            
-            this.Opacity -= .10;
-            if (this.Opacity <= .10)
+            this.Opacity -= .07;
+            if (this.Opacity <= .07)
             {
                 this.Close();
             }

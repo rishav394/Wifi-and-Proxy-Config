@@ -17,10 +17,10 @@ namespace VIT2._4G
             string title = "",
             MessageBoxButtons messageBoxButtons = MessageBoxButtons.OK)
         {
-            // First declare an object of the type custom_messagebox
+            // First declare an object of the type custom_message-box
             var messageBox = new CustomMessagebox();
 
-            // Not set the lables and the panels accordingly
+            // Not set the labels and the panels accordingly
             if (messageBoxButtons == MessageBoxButtons.AbortRetryIgnore)
             {
                 messageBox.panel3.Enabled = true;
@@ -31,10 +31,13 @@ namespace VIT2._4G
             messageBox.label1.Text = title;
             messageBox.label2.Text = description;
 
-            // When everything is set display the messbox we created above using ShowDialog()
+            // When everything is set display the message box we created above using ShowDialog()
             messageBox.ShowDialog();
             if (dr == DialogResult.OK && messageBoxButtons == MessageBoxButtons.AbortRetryIgnore)
+            {
                 dr = DialogResult.Ignore;
+            }
+
             return dr;
         }
 

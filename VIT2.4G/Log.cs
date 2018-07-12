@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace VIT2._4G
@@ -15,7 +15,11 @@ namespace VIT2._4G
         {
             this.Str = new StreamWriter(File.Open(Path + Environment.UserName + ".log", FileMode.Append));
 
-            if (!enable) return;
+            if (!enable)
+            {
+                return;
+            }
+
             AllocConsole();
 
             Console.ForegroundColor = ConsoleColor.Magenta;
@@ -31,7 +35,6 @@ namespace VIT2._4G
         /// <summary>
         /// Enable console for logging
         /// </summary>
-
         #region Console Enabling dll crap
 
         [DllImport("kernel32.dll", SetLastError = true)]

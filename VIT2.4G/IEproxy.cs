@@ -3,29 +3,30 @@
 namespace VIT2._4G
 {
     internal static class Eproxy
-    {   
-        private static RegistryKey internetSettings;                   //Probably used to navigate to the key
+    {
+        private static RegistryKey internetSettings; // Probably used to navigate to the key
 
         /// <summary>
-		/// Open the key where Internet Explorer store's its proxy setting
-		/// </summary>
-		private static void Navigate()
+        /// Open the key where Internet Explorer store's its proxy setting
+        /// </summary>
+        private static void Navigate()
         {
             internetSettings = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings", true);
         }
 
         /// <summary>
-		/// Proxy Server name. It can be IP, IP:PORT or a HTTP URL with PORT
-		/// </summary>
+        /// Proxy Server name. It can be IP, IP:PORT or a HTTP URL with PORT
+        /// </summary>
         public static string ProxyServer
         {
             get
             {
                 Navigate();
                 string value = internetSettings.GetValue("ProxyServer", defaultValue: string.Empty).ToString();
-                internetSettings.Close();      // If we navigate we weed to close the value after we use the getVlaue method
+                internetSettings.Close(); // If we navigate we weed to close the value after we use the getVlaue method
                 return value;
             }
+
             set
             {
                 Navigate();
@@ -44,6 +45,7 @@ namespace VIT2._4G
 
                 return value > 0;
             }
+
             set
             {
                 Navigate();
@@ -51,7 +53,5 @@ namespace VIT2._4G
                 internetSettings.Close();
             }
         }
-
-
     }
 }

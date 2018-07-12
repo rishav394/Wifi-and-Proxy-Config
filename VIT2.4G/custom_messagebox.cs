@@ -46,7 +46,7 @@ namespace VIT2._4G
         #region Making the Panel1 movable
 
         /// <summary>
-        /// From codeproject. This shit makes a borderless from movable.
+        /// From codeproject. This shit makes a border-less from movable.
         /// </summary>
 
         public const int WM_NCLBUTTONDOWN = 0xA1;

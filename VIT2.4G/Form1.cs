@@ -420,7 +420,7 @@ namespace VIT2._4G
 
         private void Apply_button_Click(object sender, EventArgs e)
         {
-            _log.Create("OKAY finalising things. Apply button was clicked");
+            _log.Create("OKAY finalizing things. Apply button was clicked");
             if (_ipCheckboxDisturbed)
             {
                 _log.Create("ip_checkbox_disturbed => True");
@@ -436,7 +436,7 @@ namespace VIT2._4G
                     if (pictureBox1.Visible || pictureBox2.Visible || pictureBox3.Visible || pictureBox4.Visible ||
                         !_allGood)
                     {
-                        _log.Create("Something is Invalid or get_data returned false (not allgood). ");
+                        _log.Create("Something is Invalid or get_data returned false (not all good). ");
                         CustomMessagebox.Display("Please correct the errors above and try again.");
                         return;
                     }
@@ -467,11 +467,9 @@ namespace VIT2._4G
             GetProxy();
             _log.Create("Sending for IP fetching");
             Get_ip();
-            _log.Create("Sending for Data Updatings");
+            _log.Create("Sending for Data Updating");
             Update_current_data();
             CustomMessagebox.Display("Task Complete", "Yippie!");
-            _ipCheckboxDisturbed = false;
-            _proxyCheckboxDisturbed = false;
         }
 
         private void Chipset_selector_SelectedIndexChanged(object sender, EventArgs e)

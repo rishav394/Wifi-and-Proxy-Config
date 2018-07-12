@@ -7,13 +7,13 @@ namespace VIT2._4G
 {
     class Log
     {
-        public static string path = Application.UserAppDataPath + "\\";
-        public StreamWriter str;
+        private static readonly string Path = Application.UserAppDataPath + "\\";
+        public readonly StreamWriter Str;
 
         public Log(bool enable)
         {
 
-            str = new StreamWriter(File.Open(path + Environment.UserName + ".log", FileMode.Append));
+            Str = new StreamWriter(File.Open(Path + Environment.UserName + ".log", FileMode.Append));
 
             if (enable)
             {
@@ -24,7 +24,7 @@ namespace VIT2._4G
                     "Now you can see my logs while I am creating them.\n\n");
                 Console.ResetColor();
                 Create("The working directory is " + Environment.CurrentDirectory);
-                Create("Logs are being stored in " + path);
+                Create("Logs are being stored in " + Path);
                 Console.WriteLine();
             }
         }
@@ -43,20 +43,20 @@ namespace VIT2._4G
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write(DateTime.Now + ":");
-            str.Write(DateTime.Now);
+            this.Str.Write(DateTime.Now);
             Console.ResetColor();
             Console.WriteLine(" {0}", data);
-            str.WriteLine(": {0}", data);
+            this.Str.WriteLine(": {0}", data);
          }
 
         public void Highlight(string data, ConsoleColor consoleColor)
         {
             Console.ForegroundColor = consoleColor;
             Console.Write(DateTime.Now + ":");
-            str.Write(DateTime.Now);
+            this.Str.Write(DateTime.Now);
             Console.ForegroundColor = consoleColor;
             Console.WriteLine(" {0}", data);
-            str.WriteLine(": {0}", data);
+            this.Str.WriteLine(": {0}", data);
             Console.ResetColor();
         }
 

@@ -14,7 +14,7 @@ namespace VIT2._4G
         {
             if (args.Contains("--console"))
             {
-                Form1.Enable_logging = true;
+                Form1.EnableLogging = true;
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

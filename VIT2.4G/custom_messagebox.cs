@@ -3,19 +3,19 @@ using System.Windows.Forms;
 
 namespace VIT2._4G
 {
-    public partial class custom_messagebox : Form
+    public partial class CustomMessagebox : Form
     {
-        private static DialogResult dr;
-        public custom_messagebox()
+        private static DialogResult _dr;
+
+        public CustomMessagebox()
         {
             InitializeComponent();
-
         }
         public static DialogResult Display(string description, string title="", 
             MessageBoxButtons messageBoxButtons=MessageBoxButtons.OK)
         {
             // First declare an object of the type custom_messagebox
-            custom_messagebox messageBox = new custom_messagebox();
+            var messageBox = new CustomMessagebox();
 
             // Not set the lables and the panels accordingly
             if (messageBoxButtons == MessageBoxButtons.AbortRetryIgnore)
@@ -29,17 +29,17 @@ namespace VIT2._4G
             
             // When everything is set display the messbox we created above using ShowDialog()
             messageBox.ShowDialog();
-            if (dr == DialogResult.OK && messageBoxButtons == MessageBoxButtons.AbortRetryIgnore)
+            if (_dr == DialogResult.OK && messageBoxButtons == MessageBoxButtons.AbortRetryIgnore)
             {
-                dr = DialogResult.Ignore;
+                _dr = DialogResult.Ignore;
             }
-            return dr;
+            return _dr;
         }
 
 
         private void Button3_Click(object sender, EventArgs e)
         {
-            dr = DialogResult.OK;
+            _dr = DialogResult.OK;
             Close();
         }
 
@@ -53,11 +53,11 @@ namespace VIT2._4G
         public const int HT_CAPTION = 0x2;
 
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
 
-        private void Panel1_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void Panel1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -69,38 +69,38 @@ namespace VIT2._4G
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            dr = DialogResult.Abort;
+            _dr = DialogResult.Abort;
             Close();
         }
 
         private void Button4_Click(object sender, EventArgs e)
         {
-            dr = DialogResult.Ignore;
+            _dr = DialogResult.Ignore;
             Close();
         }
 
         private void Button5_Click(object sender, EventArgs e)
         {
-            dr = DialogResult.Retry;
+            _dr = DialogResult.Retry;
             Close();
         }
 
         private void Abort_button_MouseEnter(object sender, EventArgs e)
         {
             ToolTip tt = new ToolTip();
-            tt.SetToolTip(this.abort_button, "Abort");
+            tt.SetToolTip(abort_button, "Abort");
         }
 
         private void Ignore_button_MouseEnter(object sender, EventArgs e)
         {
             ToolTip tt = new ToolTip();
-            tt.SetToolTip(this.ignore_button, "Ignore");
+            tt.SetToolTip(ignore_button, "Ignore");
         }
 
         private void Retry_button_MouseEnter(object sender, EventArgs e)
         {
             ToolTip tt = new ToolTip();
-            tt.SetToolTip(this.retry_button, "Retry");
+            tt.SetToolTip(retry_button, "Retry");
         }
     }
 }

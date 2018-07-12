@@ -659,4 +659,10 @@
         ///////gB////////////////////////////////////////////////////////////////////w==
 </value>
   </data>
+  <data name="Logging_Enabled" xml:space="preserve">
+    <value>I was called with --console argument.
+Now you can see my logs while I am creating them.
+
+</value>
+  </data>
 </root>

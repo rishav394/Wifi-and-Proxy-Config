@@ -1,6 +1,6 @@
 ﻿namespace VIT2._4G
 {
-    partial class custom_messagebox
+    partial class CustomMessagebox
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(custom_messagebox));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomMessagebox));
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.close_button = new System.Windows.Forms.Button();
@@ -203,7 +203,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "custom_messagebox";
+            this.Name = "CustomMessagebox";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "custom_messagebox";
             this.panel1.ResumeLayout(false);

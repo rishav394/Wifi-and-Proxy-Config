@@ -57,7 +57,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(409, 31);
             this.panel1.TabIndex = 0;
-            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Panel1_MouseDown);
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Panel1MouseDown);
             // 
             // label1
             // 
@@ -79,7 +79,7 @@
             this.close_button.Size = new System.Drawing.Size(25, 25);
             this.close_button.TabIndex = 0;
             this.close_button.UseVisualStyleBackColor = true;
-            this.close_button.Click += new System.EventHandler(this.Button3_Click);
+            this.close_button.Click += new System.EventHandler(this.Button3Click);
             // 
             // panel2
             // 
@@ -138,8 +138,8 @@
             this.retry_button.TabIndex = 0;
             this.retry_button.Tag = "Retry";
             this.retry_button.UseVisualStyleBackColor = true;
-            this.retry_button.Click += new System.EventHandler(this.Button5_Click);
-            this.retry_button.MouseHover += new System.EventHandler(this.Retry_button_MouseEnter);
+            this.retry_button.Click += new System.EventHandler(this.Button5Click);
+            this.retry_button.MouseHover += new System.EventHandler(this.RetryButtonMouseEnter);
             // 
             // ignore_button
             // 
@@ -152,8 +152,8 @@
             this.ignore_button.TabIndex = 0;
             this.ignore_button.Tag = "Ignore";
             this.ignore_button.UseVisualStyleBackColor = true;
-            this.ignore_button.Click += new System.EventHandler(this.Button4_Click);
-            this.ignore_button.MouseHover += new System.EventHandler(this.Ignore_button_MouseEnter);
+            this.ignore_button.Click += new System.EventHandler(this.Button4Click);
+            this.ignore_button.MouseHover += new System.EventHandler(this.IgnoreButtonMouseEnter);
             // 
             // abort_button
             // 
@@ -167,8 +167,8 @@
             this.abort_button.TabIndex = 0;
             this.abort_button.Tag = "Abort";
             this.abort_button.UseVisualStyleBackColor = true;
-            this.abort_button.Click += new System.EventHandler(this.Button1_Click);
-            this.abort_button.MouseHover += new System.EventHandler(this.Abort_button_MouseEnter);
+            this.abort_button.Click += new System.EventHandler(this.Button1Click);
+            this.abort_button.MouseHover += new System.EventHandler(this.AbortButtonMouseEnter);
             // 
             // ok_button
             // 
@@ -183,7 +183,7 @@
             this.ok_button.Text = "Aight";
             this.ok_button.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ok_button.UseVisualStyleBackColor = true;
-            this.ok_button.Click += new System.EventHandler(this.Button3_Click);
+            this.ok_button.Click += new System.EventHandler(this.Button3Click);
             // 
             // bunifuElipse1
             // 

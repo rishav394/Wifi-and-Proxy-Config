@@ -12,7 +12,7 @@ namespace VIT2._4G
         public static bool EnableLogging = false;
 
         private readonly Log _log = new Log(EnableLogging);
-
+        
         #region Placeholder's crap
 
         /// <summary>
@@ -284,22 +284,22 @@ namespace VIT2._4G
             }
         }
 
-        private void Button_mini_Click(object sender, EventArgs e)
+        private void ButtonMiniClick(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
 
-        private void Button_close_Click(object sender, EventArgs e)
+        private void ButtonCloseClick(object sender, EventArgs e)
         {
-            Application.Exit();
+            this.timer1.Enabled = true;
         }
 
-        private void Button_close_MouseEnter(object sender, EventArgs e)
+        private void ButtonCloseMouseEnter(object sender, EventArgs e)
         {
             this.button_close.BackColor = Color.Red;
         }
 
-        private void Button_close_MouseLeave(object sender, EventArgs e)
+        private void ButtonCloseMouseLeave(object sender, EventArgs e)
         {
             this.button_close.BackColor = Color.Black;
         }
@@ -373,22 +373,22 @@ namespace VIT2._4G
 
         #region Error sign display wnen invalid stuff
 
-        private void Ip_textbox_TextChanged(object sender, EventArgs e)
+        private void IpTextboxTextChanged(object sender, EventArgs e)
         {
             this.pictureBox1.Visible = !this.ValidateIPv4(((TextBox)sender).Text);
         }
 
-        private void Subnet_textbox_TextChanged(object sender, EventArgs e)
+        private void SubnetTextboxTextChanged(object sender, EventArgs e)
         {
             this.pictureBox2.Visible = !this.ValidateIPv4(((TextBox)sender).Text);
         }
 
-        private void Gateway_textbox_TextChanged(object sender, EventArgs e)
+        private void GatewayTextboxTextChanged(object sender, EventArgs e)
         {
             this.pictureBox3.Visible = !this.ValidateIPv4(((TextBox)sender).Text);
         }
 
-        private void Dns_textbox_TextChanged(object sender, EventArgs e)
+        private void DnsTextboxTextChanged(object sender, EventArgs e)
         {
             this.pictureBox4.Visible = !this.ValidateIPv4(((TextBox)sender).Text);
         }
@@ -402,10 +402,10 @@ namespace VIT2._4G
             string[] splitValues = ipString.Split('.');
             if (splitValues.Length != 4) return false;
 
-            return splitValues.All(r => byte.TryParse(r, out byte tempForParsing));
+            return splitValues.All(r => byte.TryParse(r, out byte _));
         }
 
-        private void Panel1_MouseDown(object sender, MouseEventArgs e)
+        private void Panel1MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -421,18 +421,18 @@ namespace VIT2._4G
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PictureBox_MouseHover(object sender, EventArgs e)
+        private void PictureBoxMouseHover(object sender, EventArgs e)
         {
             var tt = new ToolTip();
             tt.SetToolTip((Control)sender, "Invalid");
         }
 
-        private void Cancel_button_Click(object sender, EventArgs e)
+        private void CancelButtonClick(object sender, EventArgs e)
         {
-            Application.Exit();
+            this.timer1.Enabled = true;
         }
 
-        private void Apply_button_Click(object sender, EventArgs e)
+        private void ApplyButtonClick(object sender, EventArgs e)
         {
             this._log.Create("OKAY finalizing things. Apply button was clicked");
             if (this.ipCheckboxDisturbed)
@@ -486,7 +486,7 @@ namespace VIT2._4G
             CustomMessagebox.Display("Task Complete", "Yippie!");
         }
 
-        private void Chipset_selector_SelectedIndexChanged(object sender, EventArgs e)
+        private void ChipsetSelectorSelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.isFirstRun) return;
             this.wifi = this.chipset_selector.Text;
@@ -494,15 +494,26 @@ namespace VIT2._4G
             this.Improvise();
         }
 
-        private void Remove_focus(object sender, EventArgs e)
+        private void RemoveFocus(object sender, EventArgs e)
         {
             this.label9.Focus();
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void Form1FormClosing(object sender, FormClosingEventArgs e)
         {
             this._log.Str.WriteLine("-------------------------------------------------------\n\n\n");
             this._log.Str.Dispose();
+        }
+
+        private void Timer1Tick(object sender, EventArgs e)
+        {
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+            
+            this.Opacity -= .10;
+            if (this.Opacity <= .10)
+            {
+                this.Close();
+            }
         }
     }
 }

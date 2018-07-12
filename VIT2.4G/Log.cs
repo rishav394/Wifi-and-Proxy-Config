@@ -15,19 +15,17 @@ namespace VIT2._4G
         {
             this.Str = new StreamWriter(File.Open(Path + Environment.UserName + ".log", FileMode.Append));
 
-            if (enable)
-            {
-                AllocConsole();
+            if (!enable) return;
+            AllocConsole();
 
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine(
-                    "I was called with --console argument.\n"
-                    + "Now you can see my logs while I am creating them.\n\n");
-                Console.ResetColor();
-                this.Create("The working directory is " + Environment.CurrentDirectory);
-                this.Create("Logs are being stored in " + Path);
-                Console.WriteLine();
-            }
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine(
+                "I was called with --console argument.\n"
+                + "Now you can see my logs while I am creatDotSettingsing them.\n\n");
+            Console.ResetColor();
+            this.Create("The working directory is " + Environment.CurrentDirectory);
+            this.Create("Logs are being stored in " + Path);
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -48,7 +46,7 @@ namespace VIT2._4G
             Console.Write(DateTime.Now + @":");
             this.Str.Write(DateTime.Now);
             Console.ResetColor();
-            Console.WriteLine(" {0}", data);
+            Console.WriteLine($" {data}");
             this.Str.WriteLine(": {0}", data);
         }
 

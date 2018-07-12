@@ -77,6 +77,7 @@
             this.IP_groupbo = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -101,8 +102,8 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(607, 37);
             this.panel1.TabIndex = 1;
-            this.panel1.MouseCaptureChanged += new System.EventHandler(this.Remove_focus);
-            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Panel1_MouseDown);
+            this.panel1.MouseCaptureChanged += new System.EventHandler(this.RemoveFocus);
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Panel1MouseDown);
             // 
             // button_mini
             // 
@@ -115,7 +116,7 @@
             this.button_mini.Size = new System.Drawing.Size(33, 35);
             this.button_mini.TabIndex = 1;
             this.button_mini.UseVisualStyleBackColor = true;
-            this.button_mini.Click += new System.EventHandler(this.Button_mini_Click);
+            this.button_mini.Click += new System.EventHandler(this.ButtonMiniClick);
             // 
             // button_close
             // 
@@ -129,9 +130,9 @@
             this.button_close.TabIndex = 2;
             this.button_close.Tag = "";
             this.button_close.UseVisualStyleBackColor = true;
-            this.button_close.Click += new System.EventHandler(this.Button_close_Click);
-            this.button_close.MouseEnter += new System.EventHandler(this.Button_close_MouseEnter);
-            this.button_close.MouseLeave += new System.EventHandler(this.Button_close_MouseLeave);
+            this.button_close.Click += new System.EventHandler(this.ButtonCloseClick);
+            this.button_close.MouseEnter += new System.EventHandler(this.ButtonCloseMouseEnter);
+            this.button_close.MouseLeave += new System.EventHandler(this.ButtonCloseMouseLeave);
             // 
             // label1
             // 
@@ -158,7 +159,7 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(607, 656);
             this.panel2.TabIndex = 0;
-            this.panel2.Click += new System.EventHandler(this.Remove_focus);
+            this.panel2.Click += new System.EventHandler(this.RemoveFocus);
             // 
             // panel3
             // 
@@ -168,7 +169,7 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(576, 46);
             this.panel3.TabIndex = 6;
-            this.panel3.Click += new System.EventHandler(this.Remove_focus);
+            this.panel3.Click += new System.EventHandler(this.RemoveFocus);
             // 
             // chipset_selector
             // 
@@ -180,7 +181,7 @@
             this.chipset_selector.Name = "chipset_selector";
             this.chipset_selector.Size = new System.Drawing.Size(421, 25);
             this.chipset_selector.TabIndex = 9;
-            this.chipset_selector.SelectedIndexChanged += new System.EventHandler(this.Chipset_selector_SelectedIndexChanged);
+            this.chipset_selector.SelectedIndexChanged += new System.EventHandler(this.ChipsetSelectorSelectedIndexChanged);
             // 
             // label9
             // 
@@ -205,7 +206,7 @@
             this.cancel_button.TabIndex = 5;
             this.cancel_button.Text = "Cancel";
             this.cancel_button.UseVisualStyleBackColor = true;
-            this.cancel_button.Click += new System.EventHandler(this.Cancel_button_Click);
+            this.cancel_button.Click += new System.EventHandler(this.CancelButtonClick);
             // 
             // apply_button
             // 
@@ -217,7 +218,7 @@
             this.apply_button.TabIndex = 4;
             this.apply_button.Text = "Apply Config";
             this.apply_button.UseVisualStyleBackColor = true;
-            this.apply_button.Click += new System.EventHandler(this.Apply_button_Click);
+            this.apply_button.Click += new System.EventHandler(this.ApplyButtonClick);
             // 
             // current_groupbox
             // 
@@ -238,7 +239,7 @@
             this.current_groupbox.TabIndex = 3;
             this.current_groupbox.TabStop = false;
             this.current_groupbox.Text = "Current Configuration";
-            this.current_groupbox.MouseCaptureChanged += new System.EventHandler(this.Remove_focus);
+            this.current_groupbox.MouseCaptureChanged += new System.EventHandler(this.RemoveFocus);
             // 
             // current_proxy_sol
             // 
@@ -362,7 +363,7 @@
             this.proxy_groupbox.TabIndex = 1;
             this.proxy_groupbox.TabStop = false;
             this.proxy_groupbox.Text = "Internet Proxy";
-            this.proxy_groupbox.MouseCaptureChanged += new System.EventHandler(this.Remove_focus);
+            this.proxy_groupbox.MouseCaptureChanged += new System.EventHandler(this.RemoveFocus);
             // 
             // Innet_proxy_groupbox
             // 
@@ -464,7 +465,7 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "IP Configration";
-            this.groupBox1.MouseCaptureChanged += new System.EventHandler(this.Remove_focus);
+            this.groupBox1.MouseCaptureChanged += new System.EventHandler(this.RemoveFocus);
             // 
             // pictureBox4
             // 
@@ -475,7 +476,7 @@
             this.pictureBox4.TabIndex = 4;
             this.pictureBox4.TabStop = false;
             this.pictureBox4.Visible = false;
-            this.pictureBox4.MouseEnter += new System.EventHandler(this.PictureBox_MouseHover);
+            this.pictureBox4.MouseEnter += new System.EventHandler(this.PictureBoxMouseHover);
             // 
             // pictureBox3
             // 
@@ -486,7 +487,7 @@
             this.pictureBox3.TabIndex = 4;
             this.pictureBox3.TabStop = false;
             this.pictureBox3.Visible = false;
-            this.pictureBox3.MouseEnter += new System.EventHandler(this.PictureBox_MouseHover);
+            this.pictureBox3.MouseEnter += new System.EventHandler(this.PictureBoxMouseHover);
             // 
             // pictureBox2
             // 
@@ -497,7 +498,7 @@
             this.pictureBox2.TabIndex = 4;
             this.pictureBox2.TabStop = false;
             this.pictureBox2.Visible = false;
-            this.pictureBox2.MouseEnter += new System.EventHandler(this.PictureBox_MouseHover);
+            this.pictureBox2.MouseEnter += new System.EventHandler(this.PictureBoxMouseHover);
             // 
             // pictureBox1
             // 
@@ -508,7 +509,7 @@
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Visible = false;
-            this.pictureBox1.MouseEnter += new System.EventHandler(this.PictureBox_MouseHover);
+            this.pictureBox1.MouseEnter += new System.EventHandler(this.PictureBoxMouseHover);
             // 
             // DHCP_checkbox
             // 
@@ -530,7 +531,7 @@
             this.dns_textbox.Name = "dns_textbox";
             this.dns_textbox.Size = new System.Drawing.Size(421, 23);
             this.dns_textbox.TabIndex = 3;
-            this.dns_textbox.TextChanged += new System.EventHandler(this.Dns_textbox_TextChanged);
+            this.dns_textbox.TextChanged += new System.EventHandler(this.DnsTextboxTextChanged);
             // 
             // gateway_textbox
             // 
@@ -538,7 +539,7 @@
             this.gateway_textbox.Name = "gateway_textbox";
             this.gateway_textbox.Size = new System.Drawing.Size(421, 23);
             this.gateway_textbox.TabIndex = 2;
-            this.gateway_textbox.TextChanged += new System.EventHandler(this.Gateway_textbox_TextChanged);
+            this.gateway_textbox.TextChanged += new System.EventHandler(this.GatewayTextboxTextChanged);
             // 
             // subnet_textbox
             // 
@@ -546,7 +547,7 @@
             this.subnet_textbox.Name = "subnet_textbox";
             this.subnet_textbox.Size = new System.Drawing.Size(421, 23);
             this.subnet_textbox.TabIndex = 1;
-            this.subnet_textbox.TextChanged += new System.EventHandler(this.Subnet_textbox_TextChanged);
+            this.subnet_textbox.TextChanged += new System.EventHandler(this.SubnetTextboxTextChanged);
             // 
             // ip_textbox
             // 
@@ -554,7 +555,7 @@
             this.ip_textbox.Name = "ip_textbox";
             this.ip_textbox.Size = new System.Drawing.Size(421, 23);
             this.ip_textbox.TabIndex = 0;
-            this.ip_textbox.TextChanged += new System.EventHandler(this.Ip_textbox_TextChanged);
+            this.ip_textbox.TextChanged += new System.EventHandler(this.IpTextboxTextChanged);
             // 
             // label7
             // 
@@ -640,6 +641,11 @@
             this.bunifuElipse1.ElipseRadius = 10;
             this.bunifuElipse1.TargetControl = this;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 50;
+            this.timer1.Tick += new System.EventHandler(this.Timer1Tick);
+            // 
             // Form1
             // 
             this.AcceptButton = this.apply_button;
@@ -657,7 +663,7 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -730,6 +736,7 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.ComboBox chipset_selector;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

@@ -38,7 +38,7 @@ namespace VIT2._4G
             return dr;
         }
 
-        private void Button3_Click(object sender, EventArgs e)
+        private void Button3Click(object sender, EventArgs e)
         {
             dr = DialogResult.OK;
             this.Close();
@@ -59,7 +59,7 @@ namespace VIT2._4G
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
 
-        private void Panel1_MouseDown(object sender, MouseEventArgs e)
+        private void Panel1MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -70,37 +70,37 @@ namespace VIT2._4G
 
         #endregion
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void Button1Click(object sender, EventArgs e)
         {
             dr = DialogResult.Abort;
             this.Close();
         }
 
-        private void Button4_Click(object sender, EventArgs e)
+        private void Button4Click(object sender, EventArgs e)
         {
             dr = DialogResult.Ignore;
             this.Close();
         }
 
-        private void Button5_Click(object sender, EventArgs e)
+        private void Button5Click(object sender, EventArgs e)
         {
             dr = DialogResult.Retry;
             this.Close();
         }
 
-        private void Abort_button_MouseEnter(object sender, EventArgs e)
+        private void AbortButtonMouseEnter(object sender, EventArgs e)
         {
             var tt = new ToolTip();
             tt.SetToolTip(this.abort_button, "Abort");
         }
 
-        private void Ignore_button_MouseEnter(object sender, EventArgs e)
+        private void IgnoreButtonMouseEnter(object sender, EventArgs e)
         {
             var tt = new ToolTip();
             tt.SetToolTip(this.ignore_button, "Ignore");
         }
 
-        private void Retry_button_MouseEnter(object sender, EventArgs e)
+        private void RetryButtonMouseEnter(object sender, EventArgs e)
         {
             var tt = new ToolTip();
             tt.SetToolTip(this.retry_button, "Retry");

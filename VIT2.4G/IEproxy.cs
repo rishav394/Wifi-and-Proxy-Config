@@ -4,14 +4,14 @@ namespace VIT2._4G
 {
     internal static class Eproxy
     {   
-        private static RegistryKey _internetSettings;                   //Probably used to navigate to the key
+        private static RegistryKey internetSettings;                   //Probably used to navigate to the key
 
         /// <summary>
 		/// Open the key where Internet Explorer store's its proxy setting
 		/// </summary>
 		private static void Navigate()
         {
-            _internetSettings = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings", true);
+            internetSettings = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings", true);
         }
 
         /// <summary>
@@ -22,15 +22,15 @@ namespace VIT2._4G
             get
             {
                 Navigate();
-                string value = _internetSettings.GetValue("ProxyServer", defaultValue: string.Empty).ToString();
-                _internetSettings.Close();      // If we navigate we weed to close the value after we use the getVlaue method
+                string value = internetSettings.GetValue("ProxyServer", defaultValue: string.Empty).ToString();
+                internetSettings.Close();      // If we navigate we weed to close the value after we use the getVlaue method
                 return value;
             }
             set
             {
                 Navigate();
-                _internetSettings.SetValue("ProxyServer", value);
-                _internetSettings.Close();
+                internetSettings.SetValue("ProxyServer", value);
+                internetSettings.Close();
             }
         }
 
@@ -39,16 +39,16 @@ namespace VIT2._4G
             get
             {
                 Navigate();
-                int value = (int)_internetSettings.GetValue("ProxyEnable", 0);
-                _internetSettings.Close();
+                int value = (int)internetSettings.GetValue("ProxyEnable", 0);
+                internetSettings.Close();
 
                 return value > 0;
             }
             set
             {
                 Navigate();
-                _internetSettings.SetValue("ProxyEnable", value ? 1 : 0);
-                _internetSettings.Close();
+                internetSettings.SetValue("ProxyEnable", value ? 1 : 0);
+                internetSettings.Close();
             }
         }
 

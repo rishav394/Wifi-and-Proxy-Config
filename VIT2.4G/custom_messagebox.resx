@@ -665,4 +665,7 @@ Now you can see my logs while I am creating them.
 
 </value>
   </data>
+  <data name="Log_Create__" xml:space="preserve">
+    <value>:</value>
+  </data>
 </root>

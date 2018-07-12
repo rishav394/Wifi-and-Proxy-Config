@@ -5,14 +5,17 @@ namespace VIT2._4G
 {
     public partial class CustomMessagebox : Form
     {
-        private static DialogResult _dr;
+        private static DialogResult dr;
 
-        public CustomMessagebox()
+        private CustomMessagebox()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
-        public static DialogResult Display(string description, string title="", 
-            MessageBoxButtons messageBoxButtons=MessageBoxButtons.OK)
+
+        public static DialogResult Display(
+            string description,
+            string title = "",
+            MessageBoxButtons messageBoxButtons = MessageBoxButtons.OK)
         {
             // First declare an object of the type custom_messagebox
             var messageBox = new CustomMessagebox();
@@ -24,23 +27,21 @@ namespace VIT2._4G
                 messageBox.panel3.Visible = true;
                 System.Media.SystemSounds.Hand.Play();
             }
+
             messageBox.label1.Text = title;
             messageBox.label2.Text = description;
-            
+
             // When everything is set display the messbox we created above using ShowDialog()
             messageBox.ShowDialog();
-            if (_dr == DialogResult.OK && messageBoxButtons == MessageBoxButtons.AbortRetryIgnore)
-            {
-                _dr = DialogResult.Ignore;
-            }
-            return _dr;
+            if (dr == DialogResult.OK && messageBoxButtons == MessageBoxButtons.AbortRetryIgnore)
+                dr = DialogResult.Ignore;
+            return dr;
         }
-
 
         private void Button3_Click(object sender, EventArgs e)
         {
-            _dr = DialogResult.OK;
-            Close();
+            dr = DialogResult.OK;
+            this.Close();
         }
 
         #region Making the Panel1 movable
@@ -48,12 +49,13 @@ namespace VIT2._4G
         /// <summary>
         /// From codeproject. This shit makes a border-less from movable.
         /// </summary>
-
         public const int WM_NCLBUTTONDOWN = 0xA1;
+
         public const int HT_CAPTION = 0x2;
 
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
 
@@ -62,45 +64,46 @@ namespace VIT2._4G
             if (e.Button == MouseButtons.Left)
             {
                 ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+                SendMessage(this.Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
+
         #endregion
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            _dr = DialogResult.Abort;
-            Close();
+            dr = DialogResult.Abort;
+            this.Close();
         }
 
         private void Button4_Click(object sender, EventArgs e)
         {
-            _dr = DialogResult.Ignore;
-            Close();
+            dr = DialogResult.Ignore;
+            this.Close();
         }
 
         private void Button5_Click(object sender, EventArgs e)
         {
-            _dr = DialogResult.Retry;
-            Close();
+            dr = DialogResult.Retry;
+            this.Close();
         }
 
         private void Abort_button_MouseEnter(object sender, EventArgs e)
         {
-            ToolTip tt = new ToolTip();
-            tt.SetToolTip(abort_button, "Abort");
+            var tt = new ToolTip();
+            tt.SetToolTip(this.abort_button, "Abort");
         }
 
         private void Ignore_button_MouseEnter(object sender, EventArgs e)
         {
-            ToolTip tt = new ToolTip();
-            tt.SetToolTip(ignore_button, "Ignore");
+            var tt = new ToolTip();
+            tt.SetToolTip(this.ignore_button, "Ignore");
         }
 
         private void Retry_button_MouseEnter(object sender, EventArgs e)
         {
-            ToolTip tt = new ToolTip();
-            tt.SetToolTip(retry_button, "Retry");
+            var tt = new ToolTip();
+            tt.SetToolTip(this.retry_button, "Retry");
         }
     }
 }

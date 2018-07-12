@@ -10,8 +10,8 @@ namespace VIT2._4G
     public partial class Form1 : Form
     {
         public static bool EnableLogging = false;
-        private readonly Log _log = new Log(EnableLogging);
 
+        private readonly Log _log = new Log(EnableLogging);
 
         #region Placeholder's crap
 
@@ -25,7 +25,10 @@ namespace VIT2._4G
         /// <param name="lParam">[MarshalAs(UnmanagedType.LPWStr)]string</param>
         /// <returns></returns>
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern int SendMessage(IntPtr hWnd, int msg, int wParam,
+        private static extern int SendMessage(
+            IntPtr hWnd,
+            int msg,
+            int wParam,
             [MarshalAs(UnmanagedType.LPWStr)] string lParam);
 
         private const int EM_SETCUEBANNER = 0x1501;
@@ -51,163 +54,173 @@ namespace VIT2._4G
 
         #region  Variables
 
-        private string _proxyAddress;
-        private string _ipAdd;
-        private string _subNet;
-        private string _gateway;
-        private string _dns;
-        private bool _isDhcpEnabled;
-        private bool _isProxyEnabled;
+        private string proxyAddress;
 
+        private string ipAdd;
 
-        private string _wifi; // "[00000011] Realtek RTL8188EE 802.11 bgn Wi-Fi Adapter"
-        private readonly bool _isFirstRun = true;
-        private bool _allGood = true;
-        private bool _ipCheckboxDisturbed;
-        private bool _proxyCheckboxDisturbed;
+        private string subNet;
+
+        private string gateway;
+
+        private string dns;
+
+        private bool isDhcpEnabled;
+
+        private bool isProxyEnabled;
+
+        private string wifi; // "[00000011] Realtek RTL8188EE 802.11 bgn Wi-Fi Adapter"
+
+        private readonly bool isFirstRun;
+
+        private bool allGood = true;
+
+        private bool ipCheckboxDisturbed;
+
+        private bool proxyCheckboxDisturbed;
 
         #endregion
 
         public Form1()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
-            Select_wifi_chipset();
+            this.SelectWifiChipset();
 
-            apply_button.ForeColor = Color.FromArgb(100, 100, 100);
+            this.apply_button.ForeColor = Color.FromArgb(100, 100, 100);
 
-            _improvise();
+            this.Improvise();
 
-            _isFirstRun = false;
+            this.isFirstRun = false;
         }
 
-        private void Select_wifi_chipset()
+        private void SelectWifiChipset()
         {
             var noMore = false;
             foreach (ManagementBaseObject o in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
             {
-                var monew = (ManagementObject) o;
-                chipset_selector.Items.Add(monew["Caption"]);
+                var monew = (ManagementObject)o;
+                this.chipset_selector.Items.Add(monew["Caption"]);
 
-                if ((bool) monew["IPEnabled"])
+                if ((bool)monew["IPEnabled"])
                 {
-                    _log.Create("Okay I found a IP Enabled Device");
-                    chipset_selector.Items[chipset_selector.Items.Count - 1] += "\t♥";
+                    this._log.Create("Okay I found a IP Enabled Device");
+                    this.chipset_selector.Items[this.chipset_selector.Items.Count - 1] += "\t♥";
                     if (!noMore)
                     {
-                        _log.Create("Hmm let me check if the NIC is a WiFi adapter");
+                        this._log.Create("Hmm let me check if the NIC is a WiFi adapter");
                         noMore = monew["Caption"].ToString().Contains("Wi-Fi");
-                        chipset_selector.SelectedIndex = chipset_selector.Items.Count - 1;
-                        _wifi = monew["Caption"].ToString();
-                        if (noMore) _log.Highlight("Hurrah Wi-Fi was found. `nomore` = true now", ConsoleColor.Cyan);
+                        this.chipset_selector.SelectedIndex = this.chipset_selector.Items.Count - 1;
+                        this.wifi = monew["Caption"].ToString();
+                        if (noMore) this._log.Highlight("Hurrah Wi-Fi was found. `nomore` = true now", ConsoleColor.Cyan);
                     }
                 }
             }
         }
 
-        private void _improvise()
+        private void Improvise()
         {
-            _log.Create("Improvise called.");
-            _log.Create("Calling Get_current_data()");
-            _allGood = Get_current_data();
-            _log.Create("allGood => " + _allGood);
-            if (!_allGood) return;
-            _log.Create("Making button White");
-            apply_button.ForeColor = Color.White;
+            this._log.Create("Improvise called.");
+            this._log.Create("Calling Get_current_data()");
+            this.allGood = this.GetCurrentData();
+            this._log.Create("allGood => " + this.allGood);
+            if (!this.allGood) return;
+            this._log.Create("Making button White");
+            this.apply_button.ForeColor = Color.White;
 
-            _log.Create("We are connected to a wifi and have a valid address. Sending data for being updated. ");
-            Update_current_data();
+            this._log.Create("We are connected to a wifi and have a valid address. Sending data for being updated. ");
+            this.UpdateCurrentData();
 
-            _log.Create("Setting Placeholders");
+            this._log.Create("Setting Placeholders");
             try
             {
-                SendMessage(address_textbox.Handle, EM_SETCUEBANNER, 0, _proxyAddress.Split(':')[0]);
-                SendMessage(port_textbox.Handle, EM_SETCUEBANNER, 0, _proxyAddress.Split(':')[1]);
+                SendMessage(this.address_textbox.Handle, EM_SETCUEBANNER, 0, this.proxyAddress.Split(':')[0]);
+                SendMessage(this.port_textbox.Handle, EM_SETCUEBANNER, 0, this.proxyAddress.Split(':')[1]);
             }
             catch
             {
-                SendMessage(address_textbox.Handle, EM_SETCUEBANNER, 0, "none");
-                SendMessage(port_textbox.Handle, EM_SETCUEBANNER, 0, "none");
+                SendMessage(this.address_textbox.Handle, EM_SETCUEBANNER, 0, "none");
+                SendMessage(this.port_textbox.Handle, EM_SETCUEBANNER, 0, "none");
             }
 
-            SendMessage(ip_textbox.Handle, EM_SETCUEBANNER, 0, _ipAdd);
-            SendMessage(subnet_textbox.Handle, EM_SETCUEBANNER, 0, _subNet);
-            SendMessage(gateway_textbox.Handle, EM_SETCUEBANNER, 0, _gateway);
-            SendMessage(dns_textbox.Handle, EM_SETCUEBANNER, 0, _dns);
+            SendMessage(this.ip_textbox.Handle, EM_SETCUEBANNER, 0, this.ipAdd);
+            SendMessage(this.subnet_textbox.Handle, EM_SETCUEBANNER, 0, this.subNet);
+            SendMessage(this.gateway_textbox.Handle, EM_SETCUEBANNER, 0, this.gateway);
+            SendMessage(this.dns_textbox.Handle, EM_SETCUEBANNER, 0, this.dns);
         }
 
         /// <summary>
         ///     Placing information into current_groupBox
         /// </summary>
-        private void Update_current_data()
+        private void UpdateCurrentData()
         {
-            _log.Create("Updating data into current groupBox");
-            DHCP_checkbox.Checked = _isDhcpEnabled;
-            proxy_checkbox.Checked = _isProxyEnabled;
+            this._log.Create("Updating data into current groupBox");
+            this.DHCP_checkbox.Checked = this.isDhcpEnabled;
+            this.proxy_checkbox.Checked = this.isProxyEnabled;
 
-            Disable_IP_textboxes(_isDhcpEnabled);
-            Disable_Proxy_textboxes(_isProxyEnabled);
+            this.DisableIpTextboxes(this.isDhcpEnabled);
+            this.DisableProxyTextboxes(this.isProxyEnabled);
 
-            current_ip_sol.Text = _ipAdd;
-            current_dns_sol.Text = _dns;
-            current_subnet_sol.Text = _subNet;
-            current_gateway_sol.Text = _gateway;
-            current_proxy_sol.Text = _isProxyEnabled ? _proxyAddress : "Disabled";
+            this.current_ip_sol.Text = this.ipAdd;
+            this.current_dns_sol.Text = this.dns;
+            this.current_subnet_sol.Text = this.subNet;
+            this.current_gateway_sol.Text = this.gateway;
+            this.current_proxy_sol.Text = this.isProxyEnabled ? this.proxyAddress : "Disabled";
 
-            _log.Create("Done!");
+            this._log.Create("Done!");
         }
 
         /// <summary>
         ///     Calling both GetIp and GetProxy
         /// </summary>
         /// <returns>returns false if an exception was throws earlier and we are not collected to a wifi with aproper address</returns>
-        private bool Get_current_data()
+        private bool GetCurrentData()
         {
-            GetProxy();
-            return Get_ip();
+            this.GetProxy();
+            return this.GetIp();
         }
 
         private void GetProxy()
         {
-            _log.Create("Getting proxy");
-            _isProxyEnabled = Eproxy.ProxyEnabled;
-            _log.Create(Eproxy.ProxyEnabled + " => is the proxyEnabled");
-            _proxyAddress = Eproxy.ProxyServer;
+            this._log.Create("Getting proxy");
+            this.isProxyEnabled = Eproxy.ProxyEnabled;
+            this._log.Create(Eproxy.ProxyEnabled + " => is the proxyEnabled");
+            this.proxyAddress = Eproxy.ProxyServer;
         }
 
         private void SetProxy()
         {
-            if (proxy_checkbox.Checked)
+            if (this.proxy_checkbox.Checked)
             {
-                _log.Create("Setting proxy from input as " + _proxyAddress);
+                this._log.Create("Setting proxy from input as " + this.proxyAddress);
                 Eproxy.ProxyEnabled = true;
-                Eproxy.ProxyServer = _proxyAddress;
+                Eproxy.ProxyServer = this.proxyAddress;
             }
             else
             {
-                _log.Create("User wants to remove proxy completely. (If not already disabled) \n" +
-                            "We dont touch the proxy values. Just setting the EnableProxy => False");
+                this._log.Create(
+                    "User wants to remove proxy completely. (If not already disabled) \n"
+                    + "We dont touch the proxy values. Just setting the EnableProxy => False");
                 Eproxy.ProxyEnabled = false;
             }
         }
 
-        private bool Get_ip()
+        private bool GetIp()
         {
-            _log.Create("Beginning to extract IP");
+            this._log.Create("Beginning to extract IP");
             try
             {
                 foreach (ManagementBaseObject o in
                     new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
                 {
-                    var mo = (ManagementObject) o;
-                    if (mo["Caption"].Equals(_wifi))
+                    var mo = (ManagementObject)o;
+                    if (mo["Caption"].Equals(this.wifi))
                     {
-                        _log.Create("Got a match for NIC with " + _wifi);
-                        _isDhcpEnabled = (bool) mo.Properties["DHCPEnabled"].Value;
-                        _ipAdd = ((string[]) mo["IPAddress"])[0];
-                        _subNet = ((string[]) mo["IPSubnet"])[0];
-                        _gateway = ((string[]) mo["DefaultIPGateway"])[0];
-                        _dns = ((string[]) mo["DNSServerSearchOrder"])[0];
+                        this._log.Create("Got a match for NIC with " + this.wifi);
+                        this.isDhcpEnabled = (bool)mo.Properties["DHCPEnabled"].Value;
+                        this.ipAdd = ((string[])mo["IPAddress"])[0];
+                        this.subNet = ((string[])mo["IPSubnet"])[0];
+                        this.gateway = ((string[])mo["DefaultIPGateway"])[0];
+                        this.dns = ((string[])mo["DNSServerSearchOrder"])[0];
 
                         break;
                     }
@@ -215,55 +228,56 @@ namespace VIT2._4G
             }
             catch
             {
-                switch (CustomMessagebox.Display("You are not connected to the specified chip set or " +
-                                                 "your IP address is invalid. The data processed IS UTTER CRAP.",
-                    "Connection Error", MessageBoxButtons.AbortRetryIgnore))
+                switch (CustomMessagebox.Display(
+                    "You are not connected to the specified chip set or "
+                    + "your IP address is invalid. The data processed IS UTTER CRAP.",
+                    "Connection Error",
+                    MessageBoxButtons.AbortRetryIgnore))
                 {
                     case DialogResult.Ignore:
                         break;
                     case DialogResult.Retry:
-                        Get_ip();
+                        this.GetIp();
                         break;
                     default:
                         Environment.Exit(1);
                         break;
                 }
 
-                _log.Create("Okay something went wrong and we displayed the Not connected custom_messagebox");
+                this._log.Create("Okay something went wrong and we displayed the Not connected custom_messagebox");
                 return false;
             }
 
-            _log.Create("IP extraction was all good");
+            this._log.Create("IP extraction was all good");
             return true;
         }
 
-        private void Set_ip()
+        private void SetIp()
         {
-            _log.Create("Testing for isDHCPEnabled?");
-            _log.Create("No it is not. Setting static IP");
+            this._log.Create("Testing for isDHCPEnabled?");
+            this._log.Create("No it is not. Setting static IP");
 
-            foreach (var o in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
+            foreach (ManagementBaseObject o in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
             {
-                var objMo = (ManagementObject) o;
-                if (objMo["Caption"].Equals(_wifi))
+                var objMo = (ManagementObject)o;
+                if (objMo["Caption"].Equals(this.wifi))
                 {
-                    _log.Create("Matched with " + _wifi);
+                    this._log.Create("Matched with " + this.wifi);
 
                     ManagementBaseObject newIp = objMo.GetMethodParameters("EnableStatic");
-                    newIp["IPAddress"] = new[] {_ipAdd};
-                    newIp["SubnetMask"] = new[] {_subNet};
+                    newIp["IPAddress"] = new[] { this.ipAdd };
+                    newIp["SubnetMask"] = new[] { this.subNet };
 
                     ManagementBaseObject newGate = objMo.GetMethodParameters("SetGateways");
-                    newGate["DefaultIPGateway"] = new[] {_gateway};
-                    newGate["GatewayCostMetric"] = new[] {1};
+                    newGate["DefaultIPGateway"] = new[] { this.gateway };
+                    newGate["GatewayCostMetric"] = new[] { 1 };
 
                     ManagementBaseObject newDns = objMo.GetMethodParameters("SetDNSServerSearchOrder");
-                    newDns["DNSServerSearchOrder"] = _dns.Split(',');
+                    newDns["DNSServerSearchOrder"] = this.dns.Split(',');
 
-
-                    _log.Create(objMo.InvokeMethod("EnableStatic", newIp, null)?.ToString());
-                    _log.Create(objMo.InvokeMethod("SetGateways", newGate, null)?.ToString());
-                    _log.Create(objMo.InvokeMethod("SetDNSServerSearchOrder", newDns, null)?.ToString());
+                    this._log.Create(objMo.InvokeMethod("EnableStatic", newIp, null)?.ToString());
+                    this._log.Create(objMo.InvokeMethod("SetGateways", newGate, null)?.ToString());
+                    this._log.Create(objMo.InvokeMethod("SetDNSServerSearchOrder", newDns, null)?.ToString());
 
                     break;
                 }
@@ -272,7 +286,7 @@ namespace VIT2._4G
 
         private void Button_mini_Click(object sender, EventArgs e)
         {
-            WindowState = FormWindowState.Minimized;
+            this.WindowState = FormWindowState.Minimized;
         }
 
         private void Button_close_Click(object sender, EventArgs e)
@@ -282,27 +296,27 @@ namespace VIT2._4G
 
         private void Button_close_MouseEnter(object sender, EventArgs e)
         {
-            button_close.BackColor = Color.Red;
+            this.button_close.BackColor = Color.Red;
         }
 
         private void Button_close_MouseLeave(object sender, EventArgs e)
         {
-            button_close.BackColor = Color.Black;
+            this.button_close.BackColor = Color.Black;
         }
 
-        private void Automatic_IP()
+        private void AutomaticIp()
         {
             object responseIp = null;
             foreach (ManagementBaseObject o in new ManagementClass("Win32_NetworkAdapterConfiguration").GetInstances())
             {
-                var moTemp = (ManagementObject) o;
-                if (moTemp["Caption"].Equals(_wifi))
+                var moTemp = (ManagementObject)o;
+                if (moTemp["Caption"].Equals(this.wifi))
                 {
                     responseIp = moTemp.InvokeMethod("EnableDHCP", null);
-                    _log.Create(responseIp + " => Response from Enable DHCP");
+                    this._log.Create(responseIp + " => Response from Enable DHCP");
                     ManagementBaseObject newDns = moTemp.GetMethodParameters("SetDNSServerSearchOrder");
                     newDns["DNSServerSearchOrder"] = null;
-                    _log.Create(moTemp.InvokeMethod("SetDNSServerSearchOrder", newDns, null)?.ToString());
+                    this._log.Create(moTemp.InvokeMethod("SetDNSServerSearchOrder", newDns, null)?.ToString());
 
                     break;
                 }
@@ -310,72 +324,73 @@ namespace VIT2._4G
 
             if (responseIp != null && responseIp.ToString().Equals("0"))
             {
-                _log.Create("DHCP enabled");
+                this._log.Create("DHCP enabled");
                 CustomMessagebox.Display("IP will be set automatically.", "Done!");
             }
             else
             {
                 if (responseIp != null)
-                    _log.Create("Something fucked up. The response from Enable DHCP is not 0 and is "
-                                + responseIp + " instead. Check Documentation for what it stands for.");
+                    this._log.Create(
+                        "Something fucked up. The response from Enable DHCP is not 0 and is " + responseIp
+                                                                                              + " instead. Check Documentation for what it stands for.");
                 CustomMessagebox.Display("I guess something went wrong. Please report this issue.", "Uhh!");
             }
         }
 
         private void DHCP_checkbox_OnChange(object sender, EventArgs e)
         {
-            _ipCheckboxDisturbed = true;
-            Disable_IP_textboxes(DHCP_checkbox.Checked);
-            _isDhcpEnabled = DHCP_checkbox.Checked;
+            this.ipCheckboxDisturbed = true;
+            this.DisableIpTextboxes(this.DHCP_checkbox.Checked);
+            this.isDhcpEnabled = this.DHCP_checkbox.Checked;
         }
 
         private void Proxy_checkbox_OnChange(object sender, EventArgs e)
         {
-            _proxyCheckboxDisturbed = true;
-            Disable_Proxy_textboxes(proxy_checkbox.Checked);
+            this.proxyCheckboxDisturbed = true;
+            this.DisableProxyTextboxes(this.proxy_checkbox.Checked);
         }
 
-        private void Disable_IP_textboxes(bool v)
+        private void DisableIpTextboxes(bool v)
         {
             v = !v;
-            dns_textbox.Enabled = v;
-            gateway_textbox.Enabled = v;
-            subnet_textbox.Enabled = v;
-            ip_textbox.Enabled = v;
-            label4.ForeColor = v ? Color.FromArgb(255, 255, 255) : Color.FromArgb(100, 100, 100);
-            label5.ForeColor = v ? Color.FromArgb(255, 255, 255) : Color.FromArgb(100, 100, 100);
-            label6.ForeColor = v ? Color.FromArgb(255, 255, 255) : Color.FromArgb(100, 100, 100);
-            label7.ForeColor = v ? Color.FromArgb(255, 255, 255) : Color.FromArgb(100, 100, 100);
+            this.dns_textbox.Enabled = v;
+            this.gateway_textbox.Enabled = v;
+            this.subnet_textbox.Enabled = v;
+            this.ip_textbox.Enabled = v;
+            this.label4.ForeColor = v ? Color.FromArgb(255, 255, 255) : Color.FromArgb(100, 100, 100);
+            this.label5.ForeColor = v ? Color.FromArgb(255, 255, 255) : Color.FromArgb(100, 100, 100);
+            this.label6.ForeColor = v ? Color.FromArgb(255, 255, 255) : Color.FromArgb(100, 100, 100);
+            this.label7.ForeColor = v ? Color.FromArgb(255, 255, 255) : Color.FromArgb(100, 100, 100);
         }
 
-        private void Disable_Proxy_textboxes(bool v)
+        private void DisableProxyTextboxes(bool v)
         {
-            address_textbox.Enabled = v;
-            port_textbox.Enabled = v;
-            port_label.ForeColor = v ? Color.FromArgb(255, 255, 255) : Color.FromArgb(100, 100, 100);
-            address_label.ForeColor = v ? Color.FromArgb(255, 255, 255) : Color.FromArgb(100, 100, 100);
+            this.address_textbox.Enabled = v;
+            this.port_textbox.Enabled = v;
+            this.port_label.ForeColor = v ? Color.FromArgb(255, 255, 255) : Color.FromArgb(100, 100, 100);
+            this.address_label.ForeColor = v ? Color.FromArgb(255, 255, 255) : Color.FromArgb(100, 100, 100);
         }
 
         #region Error sign display wnen invalid stuff
 
         private void Ip_textbox_TextChanged(object sender, EventArgs e)
         {
-            pictureBox1.Visible = !ValidateIPv4(((TextBox) sender).Text);
+            this.pictureBox1.Visible = !this.ValidateIPv4(((TextBox)sender).Text);
         }
 
         private void Subnet_textbox_TextChanged(object sender, EventArgs e)
         {
-            pictureBox2.Visible = !ValidateIPv4(((TextBox) sender).Text);
+            this.pictureBox2.Visible = !this.ValidateIPv4(((TextBox)sender).Text);
         }
 
         private void Gateway_textbox_TextChanged(object sender, EventArgs e)
         {
-            pictureBox3.Visible = !ValidateIPv4(((TextBox) sender).Text);
+            this.pictureBox3.Visible = !this.ValidateIPv4(((TextBox)sender).Text);
         }
 
         private void Dns_textbox_TextChanged(object sender, EventArgs e)
         {
-            pictureBox4.Visible = !ValidateIPv4(((TextBox) sender).Text);
+            this.pictureBox4.Visible = !this.ValidateIPv4(((TextBox)sender).Text);
         }
 
         #endregion
@@ -387,7 +402,6 @@ namespace VIT2._4G
             string[] splitValues = ipString.Split('.');
             if (splitValues.Length != 4) return false;
 
-
             return splitValues.All(r => byte.TryParse(r, out byte tempForParsing));
         }
 
@@ -396,7 +410,7 @@ namespace VIT2._4G
             if (e.Button == MouseButtons.Left)
             {
                 ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+                SendMessage(this.Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
 
@@ -410,7 +424,7 @@ namespace VIT2._4G
         private void PictureBox_MouseHover(object sender, EventArgs e)
         {
             var tt = new ToolTip();
-            tt.SetToolTip((Control) sender, "Invalid");
+            tt.SetToolTip((Control)sender, "Invalid");
         }
 
         private void Cancel_button_Click(object sender, EventArgs e)
@@ -420,75 +434,75 @@ namespace VIT2._4G
 
         private void Apply_button_Click(object sender, EventArgs e)
         {
-            _log.Create("OKAY finalizing things. Apply button was clicked");
-            if (_ipCheckboxDisturbed)
+            this._log.Create("OKAY finalizing things. Apply button was clicked");
+            if (this.ipCheckboxDisturbed)
             {
-                _log.Create("ip_checkbox_disturbed => True");
-                if (_isDhcpEnabled)
+                this._log.Create("ip_checkbox_disturbed => True");
+                if (this.isDhcpEnabled)
                 {
-                    _log.Create("DHCP checkbox was clicked. Automatic IP is being called...");
-                    Automatic_IP();
+                    this._log.Create("DHCP checkbox was clicked. Automatic IP is being called...");
+                    this.AutomaticIp();
                 }
                 else
                 {
-                    _log.Create("DHCP checkbox was not enabled. Trying to set IP manually.");
+                    this._log.Create("DHCP checkbox was not enabled. Trying to set IP manually.");
 
-                    if (pictureBox1.Visible || pictureBox2.Visible || pictureBox3.Visible || pictureBox4.Visible ||
-                        !_allGood)
+                    if (this.pictureBox1.Visible || this.pictureBox2.Visible || this.pictureBox3.Visible || this.pictureBox4.Visible
+                        || !this.allGood)
                     {
-                        _log.Create("Something is Invalid or get_data returned false (not all good). ");
+                        this._log.Create("Something is Invalid or get_data returned false (not all good). ");
                         CustomMessagebox.Display("Please correct the errors above and try again.");
                         return;
                     }
 
-                    _ipAdd = ip_textbox.Text.Length > 0 ? ip_textbox.Text : current_ip_sol.Text;
-                    _subNet = subnet_textbox.Text.Length > 0 ? subnet_textbox.Text : current_subnet_sol.Text;
-                    _gateway = gateway_textbox.Text.Length > 0 ? gateway_textbox.Text : current_gateway_sol.Text;
-                    _dns = dns_textbox.Text.Length > 0 ? dns_textbox.Text : current_dns_sol.Text;
+                    this.ipAdd = this.ip_textbox.Text.Length > 0 ? this.ip_textbox.Text : this.current_ip_sol.Text;
+                    this.subNet = this.subnet_textbox.Text.Length > 0 ? this.subnet_textbox.Text : this.current_subnet_sol.Text;
+                    this.gateway = this.gateway_textbox.Text.Length > 0 ? this.gateway_textbox.Text : this.current_gateway_sol.Text;
+                    this.dns = this.dns_textbox.Text.Length > 0 ? this.dns_textbox.Text : this.current_dns_sol.Text;
 
-                    Set_ip();
+                    this.SetIp();
                 }
             }
 
-            if (_proxyCheckboxDisturbed)
+            if (this.proxyCheckboxDisturbed)
             {
-                _log.Create("proxy_checkbox_disturbed => True");
+                this._log.Create("proxy_checkbox_disturbed => True");
 
-                _proxyAddress = address_textbox.Text.Length > 0 && port_textbox.Text.Length > 0
-                    ? address_textbox.Text + ":" + port_textbox.Text
-                    : Eproxy.ProxyServer;
+                this.proxyAddress = this.address_textbox.Text.Length > 0 && this.port_textbox.Text.Length > 0
+                                    ? this.address_textbox.Text + ":" + this.port_textbox.Text
+                                    : Eproxy.ProxyServer;
 
-                _log.Create("proxy_address => " + _proxyAddress);
-                _log.Create("I guess everything was good. Sending for proxy completion");
-                SetProxy();
+                this._log.Create("proxy_address => " + this.proxyAddress);
+                this._log.Create("I guess everything was good. Sending for proxy completion");
+                this.SetProxy();
             }
 
-            _log.Create("Sending for Proxy fetching");
-            GetProxy();
-            _log.Create("Sending for IP fetching");
-            Get_ip();
-            _log.Create("Sending for Data Updating");
-            Update_current_data();
+            this._log.Create("Sending for Proxy fetching");
+            this.GetProxy();
+            this._log.Create("Sending for IP fetching");
+            this.GetIp();
+            this._log.Create("Sending for Data Updating");
+            this.UpdateCurrentData();
             CustomMessagebox.Display("Task Complete", "Yippie!");
         }
 
         private void Chipset_selector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_isFirstRun) return;
-            _wifi = chipset_selector.Text;
-            label9.Focus();
-            _improvise();
+            if (this.isFirstRun) return;
+            this.wifi = this.chipset_selector.Text;
+            this.label9.Focus();
+            this.Improvise();
         }
 
         private void Remove_focus(object sender, EventArgs e)
         {
-            label9.Focus();
+            this.label9.Focus();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _log.Str.WriteLine("-------------------------------------------------------\n\n\n");
-            _log.Str.Dispose();
+            this._log.Str.WriteLine("-------------------------------------------------------\n\n\n");
+            this._log.Str.Dispose();
         }
     }
 }

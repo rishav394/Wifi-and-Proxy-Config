@@ -5,11 +5,11 @@ namespace VIT2._4G
 {
     public partial class CustomMessagebox : Form
     {
-        private static DialogResult dr;
+        private static DialogResult _dr;
 
         private CustomMessagebox()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         public static DialogResult Display(
@@ -33,18 +33,16 @@ namespace VIT2._4G
 
             // When everything is set display the message box we created above using ShowDialog()
             messageBox.ShowDialog();
-            if (dr == DialogResult.OK && messageBoxButtons == MessageBoxButtons.AbortRetryIgnore)
-            {
-                dr = DialogResult.Ignore;
-            }
+            if (_dr == DialogResult.OK && messageBoxButtons == MessageBoxButtons.AbortRetryIgnore) _dr = DialogResult.Ignore;
 
-            return dr;
+            return _dr;
         }
 
-        private void Button3Click(object sender, EventArgs e)
+        private void Button3Click(object sender,
+            EventArgs e)
         {
-            dr = DialogResult.OK;
-            this.Close();
+            _dr = DialogResult.OK;
+            Close();
         }
 
         #region Making the Panel1 movable
@@ -52,61 +50,77 @@ namespace VIT2._4G
         /// <summary>
         /// From codeproject. This shit makes a border-less from movable.
         /// </summary>
-        public const int WM_NCLBUTTONDOWN = 0xA1;
+        private const int WmNclbuttondown = 0xA1;
 
-        public const int HT_CAPTION = 0x2;
-
-        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+        private const int HtCaption = 0x2;
 
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
-        public static extern bool ReleaseCapture();
+        private static extern int SendMessage(IntPtr hWnd,
+            int msg,
+            int wParam,
+            int lParam);
 
-        private void Panel1MouseDown(object sender, MouseEventArgs e)
+        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
+        private static extern bool ReleaseCapture();
+
+        private void Panel1MouseDown(object sender,
+            MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
                 ReleaseCapture();
-                SendMessage(this.Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+                SendMessage(Handle,
+                    WmNclbuttondown,
+                    HtCaption,
+                    0);
             }
         }
 
         #endregion
 
-        private void Button1Click(object sender, EventArgs e)
+        private void Button1Click(object sender,
+            EventArgs e)
         {
-            dr = DialogResult.Abort;
-            this.Close();
+            _dr = DialogResult.Abort;
+            Close();
         }
 
-        private void Button4Click(object sender, EventArgs e)
+        private void Button4Click(object sender,
+            EventArgs e)
         {
-            dr = DialogResult.Ignore;
-            this.Close();
+            _dr = DialogResult.Ignore;
+            Close();
         }
 
-        private void Button5Click(object sender, EventArgs e)
+        private void Button5Click(object sender,
+            EventArgs e)
         {
-            dr = DialogResult.Retry;
-            this.Close();
+            _dr = DialogResult.Retry;
+            Close();
         }
 
-        private void AbortButtonMouseEnter(object sender, EventArgs e)
+        private void AbortButtonMouseEnter(object sender,
+            EventArgs e)
         {
             var tt = new ToolTip();
-            tt.SetToolTip(this.abort_button, "Abort");
+            tt.SetToolTip(abort_button,
+                "Abort");
         }
 
-        private void IgnoreButtonMouseEnter(object sender, EventArgs e)
+        private void IgnoreButtonMouseEnter(object sender,
+            EventArgs e)
         {
             var tt = new ToolTip();
-            tt.SetToolTip(this.ignore_button, "Ignore");
+            tt.SetToolTip(ignore_button,
+                "Ignore");
         }
 
-        private void RetryButtonMouseEnter(object sender, EventArgs e)
+        private void RetryButtonMouseEnter(object sender,
+            EventArgs e)
         {
             var tt = new ToolTip();
-            tt.SetToolTip(this.retry_button, "Retry");
+            tt.SetToolTip(retry_button,
+                "Retry");
         }
     }
 }
